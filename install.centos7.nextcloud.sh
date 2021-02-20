@@ -1,5 +1,12 @@
 #!/bin/sh
 ## ========install.centos7.nextcloud.sh======== ##
+
+##=====================================
+## VAR
+DATA_TIME="$(date +%Y%m%d_%k%M%S)";
+
+
+##=====================================
 cat /etc/redhat-release
 yum update
 yum install -y epel-release
@@ -18,6 +25,9 @@ yum install yum-utils -y
 yum-config-manager --enable remi-php70
 yum install php php-mysql php-pecl-zip php-xml php-mbstring php-gd php-fpm php-intl
 
+## BACKUP
+tar czvf /etc/php-fpm.d."$DATA_TIME".bac.tar.gz /etc/php-fpm.d
+
 #Теперь давайте найдем следующие строки в /etc/php-fpm.d/www.conf
 cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bac
 
@@ -31,14 +41,14 @@ sed -i 's/^group = .*/group = nginx/g' /etc/php-fpm.d/www.conf
 # разрешение для каталога сеансов PHP
 # вам нужно пропустить этот шаг, если вы хотите использовать Apache вместо Nginx.
 chown -R root:nginx /var/lib/php/session/
-
 #перезапуск php-fpm
 systemctl restart php-fpm
 
 ##=====================================
+##=====================================
 ## Установка сервера базы данных MariaDB
 
-# touch /etc/yum.repos.d/MariaDB.repo
+touch /etc/yum.repos.d/MariaDB.repo
 cat > /etc/yum.repos.d/MariaDB.repo <<EOF
 	[mariadb]
 	name = MariaDB
@@ -54,7 +64,9 @@ systemctl status mariadb
 
 # создать пароль root, удалить тестовую базу данных, удалить анонимного пользователя, а затем перезагрузить эти привилегии.
 mysql_secure_installation
-#
+
+##=====================================
+##================ INFO ================
 # Set root password? [Y/n] y
 # Remove anonymous users? [Y/n] y
 # Disallow root login remotely? [Y/n] Y
@@ -70,10 +82,12 @@ mysql -uroot -p -e "CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8
 mysql -uroot -p -e "GRANT ALL on nextcloud.* to nextcloud@localhost identified by 'numbnet'"
 mysql -uroot -p -e "FLUSH privileges"
 
-##====================================================
+##=====================================
+##=====================================
 ### Шаг 7. Настройка веб-сервера.
 ## На предыдущем шаге вы выбрали веб-сервер для установки, теперь вам нужно его настроить.
 
+##=====================================
 #Конфигурация Nginx
 #Если вы хотите использовать nginx, создайте файл конфигурации для блока сервера nginx
 
@@ -143,7 +157,7 @@ server {
 		fastcgi_pass php;
 		fastcgi_intercept_errors on;
 		fastcgi_request_buffering off;
-	}
+		}
 
 	location ~ ^/(?:updater|ocs-provider)(?:$|/) {
 		try_files $uri/ =404;
@@ -177,6 +191,8 @@ EOF
 nginx -t
 systemctl restart nginx
 
+##=====================================
+##=====================================
 # Конфигурация Apache
 # Создайте файл конфигурации виртуального хоста для домена, для размещения Nextcloud.
 
@@ -206,6 +222,7 @@ systemctl restart nginx
 #</VirtualHost>
 #EOF
 
+##=====================================
 # Перейдите на официальный сайт Nextcloud и загрузите последнюю стабильную версию приложения
 wget https://download.nextcloud.com/server/releases/nextcloud-14.0.0.zip
 
@@ -214,6 +231,8 @@ wget https://download.nextcloud.com/server/releases/nextcloud-14.0.0.zip
 unzip nextcloud-14.0.0.zip -d /var/www/
 mkdir /var/www/nextcloud/data
 chown -R nginx: /var/www/nextcloud
+
+##=====================================
 #Если вы выбрали Apache, то вам нужно установить разрешение для пользователя Apache
 # chown -R apache: /var/www/nextcloud
 exit
