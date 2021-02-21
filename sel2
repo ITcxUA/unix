@@ -1,0 +1,37 @@
+#!/bin/bash
+
+
+##=============================================
+ASK="Спросить"
+while true; do
+	read -e -p "$ASK (y/n)? " rsn
+  case $rsn in
+    [Yy]* ) break;;
+    [Nn]* ) echo "ВЫХОДИМ";exit;
+  esac
+done
+
+echo "==== START ======"
+##=============================================
+
+wait() { echo "Нажмите любую клавишу, чтобы продолжить..."; read -s -n 1; }
+
+menu() {
+echo "****  -select-  *****";
+echo "*********************";
+echo "  1) SELECT 1";
+echo "  2) SELECT 2";
+echo "  3) SELECT 3";
+echo "  4) SELECT 4" ;
+echo "*********************";
+}
+
+menu
+read n
+case $n in
+  1) echo "SELECT $n";wait;;
+  2) echo "SELECT $n";wait;;
+  3) echo "SELECT $n";wait;;
+  4) echo "SELECT $n";wait;;
+  *) echo "$n-ERROR. EXIT";sleep 3;exit;;
+esac
