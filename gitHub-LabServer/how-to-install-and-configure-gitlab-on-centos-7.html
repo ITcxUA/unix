@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="robots" content="index, follow" />
+<meta name="keywords" content="создание сайтов, программирование, development, битрикc, symfony, android" />
+<meta name="description" content="Есть несколько способов установить GitLab в зависимости от ваших требований и предпочтений. В этом руководстве рассматриваются шаги, необходимые для установки и настройки GitLab (CE) в системе CentOS 7 с использованием пакетов Omnibus. - BAKS.dev" />
+<link rel="canonical" href="https://baks.dev/article/centos/how-to-install-and-configure-gitlab-on-centos-7" />
+<link href="https://baks.dev/bitrix/js/main/core/css/core.min.css?15879278752854" type="text/css" rel="stylesheet" />
+
+
+
+<link href="https://baks.dev/bitrix/js/ui/fonts/opensans/ui.font.opensans.min.css?15879278781861" type="text/css"  rel="stylesheet" />
+<link href="https://baks.dev/bitrix/js/main/core/css/core_popup.min.css?158792787515428" type="text/css"  rel="stylesheet" />
+<link href="https://baks.dev/bitrix/cache/css/s1/baks.dev/page_313aed92703dbb9b4f89068c84ce28be/page_313aed92703dbb9b4f89068c84ce28be_v1.css?159874027755691" type="text/css"  rel="stylesheet" />
+<link href="https://baks.dev/bitrix/panel/main/popup.min.css?158792790920704" type="text/css"  rel="stylesheet" />
+<link href="https://baks.dev/bitrix/cache/css/s1/baks.dev/template_3f88398e384bfeb26a24b9d9b09242b5/template_3f88398e384bfeb26a24b9d9b09242b5_v1.css?159873919616845" type="text/css"  data-template-style="true" rel="stylesheet" />
+<script type="text/javascript">if(!window.BX)window.BX={};if(!window.BX.message)window.BX.message=function(mess){if(typeof mess=='object') for(var i in mess) BX.message[i]=mess[i]; return true;};</script>
+<script type="text/javascript">(window.BX||top.BX).message({'JS_CORE_LOADING':'Загрузка...','JS_CORE_NO_DATA':'- Нет данных -','JS_CORE_WINDOW_CLOSE':'Закрыть','JS_CORE_WINDOW_EXPAND':'Развернуть','JS_CORE_WINDOW_NARROW':'Свернуть в окно','JS_CORE_WINDOW_SAVE':'Сохранить','JS_CORE_WINDOW_CANCEL':'Отменить','JS_CORE_WINDOW_CONTINUE':'Продолжить','JS_CORE_H':'ч','JS_CORE_M':'м','JS_CORE_S':'с','JSADM_AI_HIDE_EXTRA':'Скрыть лишние','JSADM_AI_ALL_NOTIF':'Показать все','JSADM_AUTH_REQ':'Требуется авторизация!','JS_CORE_WINDOW_AUTH':'Войти','JS_CORE_IMAGE_FULL':'Полный размер'});</script>
+
+<script type="text/javascript" src="https://baks.dev/bitrix/js/main/core/core.min.js?1587927876246515"></script>
+
+<script>BX.setJSList(['/bitrix/js/main/core/core_ajax.js','/bitrix/js/main/core/core_promise.js','/bitrix/js/main/polyfill/promise/js/promise.js','/bitrix/js/main/loadext/loadext.js','/bitrix/js/main/loadext/extension.js','/bitrix/js/main/polyfill/promise/js/promise.js','/bitrix/js/main/polyfill/find/js/find.js','/bitrix/js/main/polyfill/includes/js/includes.js','/bitrix/js/main/polyfill/matches/js/matches.js','/bitrix/js/ui/polyfill/closest/js/closest.js','/bitrix/js/main/polyfill/fill/main.polyfill.fill.js','/bitrix/js/main/polyfill/find/js/find.js','/bitrix/js/main/polyfill/matches/js/matches.js','/bitrix/js/main/polyfill/core/dist/polyfill.bundle.js','/bitrix/js/main/polyfill/core/dist/polyfill.bundle.js','/bitrix/js/main/lazyload/dist/lazyload.bundle.js','/bitrix/js/main/polyfill/core/dist/polyfill.bundle.js','/bitrix/js/main/parambag/dist/parambag.bundle.js']);
+BX.setCSSList(['/bitrix/js/main/lazyload/dist/lazyload.bundle.css','/bitrix/js/main/parambag/dist/parambag.bundle.css']);</script>
+<script type="text/javascript">(window.BX||top.BX).message({'LANGUAGE_ID':'ru','FORMAT_DATE':'DD.MM.YYYY','FORMAT_DATETIME':'DD.MM.YYYY HH:MI:SS','COOKIE_PREFIX':'BITRIX_SM','SERVER_TZ_OFFSET':'10800','SITE_ID':'s1','SITE_DIR':'/','USER_ID':'','SERVER_TIME':'1614181427','USER_TZ_OFFSET':'0','USER_TZ_AUTO':'Y','bitrix_sessid':'7e4354cbfebf24b0827a81c7fb919608'});</script>
+
+
+<script type="text/javascript"  src="https://baks.dev/bitrix/cache/js/s1/baks.dev/kernel_main/kernel_main_v1.js?1598740277201799"></script>
+<script type="text/javascript" src="https://baks.dev/bitrix/js/main/core/core_popup.js?158792787676608"></script>
+<script type="text/javascript">BX.setJSList(['/bitrix/js/main/session.js','/bitrix/js/main/core/core_window.js','/bitrix/js/main/date/main.date.js','/bitrix/js/main/core/core_date.js','/bitrix/js/main/utils.js','/bitrix/js/main/core/core_fx.js','/bitrix/js/main/rating_like.js','/local/templates/baks.dev/components/bitrix/catalog.comments/baks_comments/script.js','/bitrix/components/arturgolubev/search.title/script.js','/local/templates/baks.dev/components/arturgolubev/search.title/baks_search_top/script.js']); </script>
+<script type="text/javascript">BX.setCSSList(['/local/templates/baks.dev/components/bitrix/catalog/baks_article/bitrix/catalog.element/.default/style.css','/local/templates/baks.dev/components/arturgolubev/yandex.share/baks_share_social/style.css','/local/templates/baks.dev/components/bitrix/catalog.comments/baks_comments/style.css','/bitrix/components/bitrix/blog/templates/.default/style.css','/bitrix/components/bitrix/blog/templates/.default/themes/green/style.css','/bitrix/components/bitrix/rating.vote/templates/like/popup.css','/bitrix/components/bitrix/rating.vote/templates/like/style.css','/local/templates/baks.dev/components/bitrix/catalog.comments/baks_comments/themes/black/style.css','/local/templates/baks.dev/components/bitrix/news.list/baks_footer_contact/style.css','/local/templates/baks.dev/components/bitrix/news.list/baks_footer_social/style.css','/local/templates/baks.dev/components/bitrix/menu/baks_footer_menu/style.css','/local/templates/baks.dev/components/bitrix/menu/baks_footer_pricedesc/style.css','/local/templates/baks.dev/components/bitrix/menu/baks_topmenu/style.css','/local/templates/baks.dev/components/arturgolubev/search.title/baks_search_top/style.css','/local/templates/baks.dev/styles.css','/local/templates/baks.dev/template_styles.css']); </script>
+
+        <script type="application/ld+json">
+                            {
+                                "@context": "https://schema.org",
+                                "@type": "WebSite",
+                                "url": "https://baks.dev/article/centos/how-to-install-and-configure-gitlab-on-centos-7",
+                                "potentialAction": [{
+                                    "@type": "SearchAction",
+                                    "target": "https://baks.dev/article/centos/how-to-install-and-configure-gitlab-on-centos-7search?q={q}",
+                                    "query-input": "required name=q"
+                                }]
+                            }
+                        </script> 
+    
+<script src="https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+<script src="https://yastatic.net/share2/share.js"></script>
+
+
+
+<script type="text/javascript"  src="https://baks.dev/bitrix/cache/js/s1/baks.dev/template_84aae0c1154bfcf90ae2f04fa04df409/template_84aae0c1154bfcf90ae2f04fa04df409_v1.js?159873919613729"></script>
+<script type="text/javascript"  src="https://baks.dev/bitrix/cache/js/s1/baks.dev/page_05571ee8b8940a97bd24442500a4640f/page_05571ee8b8940a97bd24442500a4640f_v1.js?15987402776450"></script>
+<script type="text/javascript">var _ba = _ba || []; _ba.push(["aid", "0cf92a34de9501ce739a6645102fed47"]); _ba.push(["host", "baks.dev"]); (function() {var ba = document.createElement("script"); ba.type = "text/javascript"; ba.async = true;ba.src = (document.location.protocol == "https:" ? "https://" : "http://") + "bitrix.info/ba.js";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ba, s);})();</script>
+
+
+
+    
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name="yandex-verification" content="b6288d103ad7e615"/>
+    <meta name="google-site-verification" content="-ngc9EGq15UDpP88Go8jwa8GRCbjCyRfhpBuYNsQToM"/>
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="https://baks.dev/local/templates/baks.dev/favicon.ico">
+    <link rel="apple-touch-icon" href="https://baks.dev/local/templates/baks.dev/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://baks.dev/local/templates/baks.dev/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://baks.dev/local/templates/baks.dev/apple-touch-icon-114x114.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/bootstrap.min.css"/>
+    <!--<link rel="stylesheet" href="https://baks.dev/css/animate.min.css"/>-->
+    <!--<link rel="stylesheet" href="https://baks.dev/fonts/fontawesome/css/all.css"/>-->
+    <!--<link rel="stylesheet" href="https://baks.dev/css/iconfont.css"/>-->
+    <!--<link rel="stylesheet" href="https://baks.dev/css/magnific-popup.css"/>-->
+    <link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/tipso.min.css"/>
+    <link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/swiper.min.css">
+    <link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/style.css"/>
+    <!--<link rel="stylesheet" href="https://baks.dev/css/padding-margin.css"/>-->
+    <!--<link rel="stylesheet" href="https://baks.dev/css/YTPlayer.css"/>-->
+
+
+    <!--<script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-154155704-1');
+    </script>-->
+
+
+    <!-- Page Title -->
+    <title>Как установить и настроить GitLab на CentOS 7</title>
+    <!-- CSS -->
+
+        <!--<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-7201355429655000",
+            enable_page_level_ads: true
+        });
+    </script>-->
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    
+
+
+
+
+</head>
+
+<body class="content-animate">
+
+
+<div id="top" class="page">
+
+    
+    
+
+
+
+
+
+    <main class="cd-main-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    <section id="articles" class="page-section pt-100 pb-80 pt-md-80 pb-md-80 pt-sm-60 pb-sm-60">
+        <div class="container">
+            <div>
+
+                <!-- SINGLE BLOG ITEM
+                    ================================================== -->
+                <!--<div class="col-md-8 col-md-offset-2">-->
+
+                <!-- SECTION BLOG ITEM
+                    ================================================== -->
+                <div class="blog-item clearfix">
+
+                    <!--POST TITLE-->
+                    <h2 class="font-face2 fw900 heading-20 mt-0 mb-10">Как установить и настроить GitLab на CentOS 7</h2>
+
+                    <!--POST META-->
+                    <div class="blog-item-meta">
+                        <span>
+                            <i class="fa fa-calendar-o"></i> 4 Января 2020                        </span>
+
+                        <span class="separator">|</span>
+                        <span>
+                            <a href="https://baks.dev/article/centos/">
+                                        <i class="fa fa-folder-open"></i>
+                                        CentOS                            </a>
+                        </span>
+
+                                                <div style="float: right;">
+                                                    </div>
+
+
+
+
+
+                                            </div>
+                    <hr class="nomargin nopadding">
+                    <!--POST DETAIL-->
+                    <div class="post-detail">
+                        <div class="block-container">
+                            <h4 class="fw300 nocase">
+                                Есть несколько способов установить GitLab в зависимости от ваших требований и предпочтений. В этом руководстве рассматриваются шаги, необходимые для установки и настройки GitLab (CE) в системе CentOS 7 с использованием пакетов Omnibus.                            </h4>
+                        </div>
+                    </div>
+
+                    <!--POST MEDIA-->
+                    <div class="blog-media">
+                        <img class="detail_picture" src="https://baks.dev/upload/iblock/f57/f57568e1c2eebce24ae336facd980ec2.webp" style="width:70%;" alt="Как установить и настроить GitLab на CentOS 7" title="Как установить и настроить GitLab на CentOS 7">
+                    </div>
+
+
+                    <!--POST BODY-->
+                    <div class="blog-item-body clearfix">
+                        <div class="markdown">
+	<p>
+		 GitLab - это веб- менеджер <a href="https://baks.dev/search.php?tags=Git">Git</a> репозитория с открытым исходным кодом, написанный на <a href="https://baks.dev/search.php?tags=Ruby">Ruby, который</a> включает в себя вики, управление проблемами, анализ кода, мониторинг, а также непрерывную интеграцию и развертывание. Это позволяет разработчикам создавать, развертывать и запускать свои приложения.
+	</p>
+	<p>
+		 Доступны три версии GitLab: Community Edition (CE), Enterprise Edition (EE) и версия, размещенная на GitLab.<span class="ezoic-pub-ad-placeholder-158"></span>
+	</p>
+	<p>
+		 Если вы хотите отодвинуть свои проекты от <a href="https://github.com/">GitHub</a> , вам обязательно стоит попробовать GitLab. Он может импортировать проекты и проблемы из разных источников, включая GitHub, что делает процесс миграции беспроблемным. Интерфейс GitLab хорошо разработан, понятен, интуитивно понятен и близок к GitHub с точки зрения пользовательского опыта и функциональности.<span class="ezoic-pub-ad-placeholder-138"></span>
+	</p>
+	<p>
+ <br>
+	</p>
+	<p>
+		 В этом руководстве предполагается, что у вас установлена ​​новая версия CentOS 7.
+	</p>
+	<p>
+ <span style="text-align: center;">Согласно </span><a href="https://docs.gitlab.com/ee/install/requirements.html#hardware-requirements" style="text-align: center;">странице требований GitLab</a><span style="text-align: center;"> , рекомендуется использовать сервер с:</span>
+	</p>
+	<ul>
+		<li>не менее 4 ГБ оперативной памяти .</li>
+		<li>2 ядра процессора.</li>
+		<li>не менее 2 ГБ пространства подкачки .</li>
+		<li>(необязательно) Домен или поддомен, указывающий на IP-адрес сервера.</li>
+	</ul>
+	<p>
+ <span class="ezoic-pub-ad-placeholder-159"></span>Для дополнительного уровня безопасности рекомендуется настроить базовый брандмауэр. Вы можете выполнить действия, <a href="https://baks.dev/search.php?tags=FirewallD">описанные</a> в нашей <a href="https://baks.dev/search.php?tags=FirewallD">инструкции по настройке брандмауэра с помощью FirewallD в CentOS 7</a> .
+	</p>
+	<p>
+	</p>
+	<p>
+		 Пользователь, в который вы входите, должен иметь <a href="https://baks.dev/search.php?tags=sudo">права sudo</a> для установки пакетов.
+	</p>
+	<h2 class="installing-required-dependencies"><br>
+	 Установка необходимых зависимостей&nbsp;</h2>
+	<p>
+		 Обновите локальный индекс пакета и установите зависимости с помощью следующих команд: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">sudo yum install curl policycoreutils-python openssh-server</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp;Чтобы GitLab мог отправлять уведомления по электронной почте, вы можете либо установить и использовать <a href="https://baks.dev/search.php?tags=Postfix">Postfix</a>, либо использовать некоторую транзакционную почтовую службу, такую ​​как SendGrid, MailChimp, MailGun или SES, и в этом случае вы можете пропустить этот следующий шаг и настроить [параметры SMTP GitLab] ( <a href="https://docs.gitlab.com/omnibus/settings/smtp.html">https://docs.gitlab.com/omnibus/settings/smtp.html</a> ) после завершения установки.
+	</p>
+	<p>
+		 Выполните следующие команды для установки Postfix на вашем сервере CentOS: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">sudo yum install postfix</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp;Во время установки вам будет предложено выбрать тип конфигурации почтового сервера. Опция по умолчанию <code>Internet Site</code>. Это рекомендуемый вариант, просто нажмите <code>TAB</code>, затем <code>ENTER</code>.
+	</p>
+	<p>
+	</p>
+	<p>
+		 Далее, вам будет предложено войти в <code>System mail name&nbsp;</code>который должен быть таким же , как ваш сервер хоста .<span class="ezoic-pub-ad-placeholder-160"></span>
+	</p>
+	<p>
+		 После завершения установки запустите и включите службу postfix, выполнив следующие команды: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">sudo systemctl start postfix</code><code class="terminal-line" prefix="$">sudo systemctl enable postfix</code></pre>
+	<h2 class="installing-gitlab"><br>
+	 Установка GitLab&nbsp;</h2>
+	<p>
+		 Установка GitLab - довольно простой процесс. Мы установим пакет GitLab CE с помощью <code>yum&nbsp;</code>менеджера пакетов.
+	</p>
+	<p>
+		 Начните с добавления репозитория GitLab в список системных источников с помощью следующей <a href="https://baks.dev/search.php?tags=curl">команды curl</a> :<br>
+ <br>
+	</p>
+	<p>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash</code></pre>
+	<p>
+ <span class="ezoic-pub-ad-placeholder-161"></span><br>
+		 Скрипт включит репозиторий и установит необходимые зависимости. После завершения установите пакет GitLab, выполнив следующую команду: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">sudo yum install gitlab-ce</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp;Вам будет предложено принять ключи GPG репозитория GitLab. Введите <code>y&nbsp;</code>и нажмите <code>Enter</code>.
+	</p>
+	<p>
+		 Процесс установки может занять некоторое время, и после успешной установки вы увидите следующий вывод:<br>
+ <br>
+ <span class="ezoic-pub-ad-placeholder-144"></span><span style="display:block !important;float:none;margin-bottom:0 !important;margin-left:0px !important;margin-right:0px !important;margin-top:24px !important;min-width:160px;text-align:center !important;" class="ezoic-ad link-v-med-3 adtester-container adtester-container-144"></span>
+	</p>
+	<p>
+	</p>
+	 <pre><code class="language-output" data-lang="output">Thank you for installing GitLab!
+...
+Complete!
+</code></pre>
+	<div class="w-full flex justify-center content-center">
+		<div class="w-full relative">
+		</div>
+	</div>
+	<h2 class="adjusting-the-firewall-rules"><br>
+	 Настройка правил брандмауэра&nbsp;</h2>
+	<p>
+		 Руководство по настройке базового брандмауэра приведено в разделе предварительных требований. Чтобы получить доступ к интерфейсу GitLab, вам нужно открыть порты <code>80&nbsp;</code>и <code>443</code>. Для этого выполните следующие команды: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">sudo firewall-cmd --permanent --zone=public --add-service=http</code><code class="terminal-line" prefix="$">sudo firewall-cmd --permanent --zone=public --add-service=https</code><code class="terminal-line" prefix="$">sudo firewall-cmd --reload</code></pre>
+	<h2 class="set-the-gitlab-url"><br>
+	 Установите URL GitLab&nbsp;</h2>
+	<p>
+		 Прежде чем получить доступ к веб-интерфейсу GitLab, нам нужно установить URL, по которому будет доступен GitLab. Откройте файл конфигурации Gitlab и внесите следующие изменения:<br>
+ <br>
+	</p>
+	<p>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">sudo nano /etc/gitlab/gitlab.rb</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp;В верхней части файла конфигурации вы увидите строку, начинающуюся с <code>external_url</code>. Измените значение в соответствии с вашим доменом / поддоменом или IP-адресом. Если у вас есть использование домена <code>https&nbsp;</code>и вы хотите получить доступ к интерфейсу GitLab через ваш IP-адрес сервера, используйте <code>http</code>.<br>
+ <br>
+	</p>
+	<p>
+	</p>
+	<div class="code-label">
+		 /etc/gitlab/gitlab.rb
+	</div>
+	<div class="highlight">
+		 <pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">external_url</span> <span class="s1">'https://gitlab.example.com'</span>
+</code></pre><br>
+	</div>
+	<p>
+		 Затем выполните поиск «Let's Encrypt интеграцию», раскомментируйте строку, начинающуюся с, <code>letsencrypt['enable']&nbsp;</code>и установите для нее значение true. При желании, если вы хотите получать электронные письма от Let's Encrypt относительно вашего домена, раскомментируйте строку, начинающуюся с, <code>letsencrypt['contact_emails']&nbsp;</code>и добавьте свой адрес электронной почты.
+	</p>
+	<p>
+		 Если вы укажете <code>external_url&nbsp;</code>IP-адрес, то не следует включать интеграцию Let's Encrypt. <br>
+ <br>
+	</p>
+	<div class="code-label">
+		 /etc/gitlab/gitlab.rb
+	</div>
+	<div class="highlight">
+		 <pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="n">letsencrypt</span><span class="o">[</span><span class="s1">'enable'</span><span class="o">]</span> <span class="o">=</span> <span class="kp">true</span>
+<span class="n">letsencrypt</span><span class="o">[</span><span class="s1">'contact_emails'</span><span class="o">]</span> <span class="o">=</span> <span class="o">[</span><span class="s1">'admin@example.com'</span><span class="o">]</span> <span class="c1"># This should be an array of email addresses to add as contacts</span>
+</code></pre>
+	</div>
+	<p>
+ <br>
+		 Наконец сохраните и закройте файл и выполните следующую команду для перенастройки Gitlab: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">sudo gitlab-ctl reconfigure</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp;Команда перенастроит настройки GitLab и создаст бесплатный SSL-сертификат Let's encrypt.<br>
+ <br>
+	</p>
+	<p>
+	</p>
+	<h2 class="configure-gitlab-through-the-web-interface">Настройте GitLab через веб-интерфейс&nbsp;</h2>
+	<p>
+		 Теперь, когда вы настроили URL GitLab, вы можете начать с начальной настройки через веб-интерфейс GitLab.
+	</p>
+	<p>
+		 Запустите <a href="https://baks.dev/search.php?tags=Chrome">веб-браузер</a> и перейдите к: <br>
+ <br>
+	</p>
+	 <pre><code class="language-url" data-lang="url">https://your_gitlab_domain_or_server_IP.com
+</code></pre>
+	<h3 class="1-setting-administrative-account-password"><br>
+	 1. Установка пароля учетной записи администратора&nbsp;</h3>
+	<p>
+		 При первом доступе к веб-интерфейсу вам будет предложено установить пароль для учетной записи администратора.
+	</p>
+ <br>
+	 &nbsp; &nbsp;&nbsp;<img src="https://baks.dev/upload/iblock/1d5/1d53986e13c32a0afa072a8bca5b610a.jpeg"><br>
+ <br>
+	<p>
+		 Введите безопасный пароль и нажмите на <code>Change your password&nbsp;</code>кнопку, когда вы закончите.
+	</p>
+	<p>
+		 Вы будете перенаправлены на страницу входа:
+	</p>
+ <br>
+ <img src="https://baks.dev/upload/iblock/073/073b095bc360b840a0c6ef61d9ce05d1.jpeg"><br>
+ <br>
+	<p>
+		 Имя пользователя по умолчанию для учетной записи администратора <code>root</code>. Позже в этом уроке мы покажем вам, как изменить имя пользователя. <br>
+ <br>
+	</p>
+	<ul>
+		<li>Имя пользователя: root</li>
+		<li>Пароль: [пароль, который вы установили]</li>
+	</ul>
+	<p>
+ <br>
+		 &nbsp; &nbsp; Введите учетные данные, нажмите <code>Sign in</code>кнопку, и вы будете перенаправлены на страницу приветствия GitLab.
+	</p>
+ <br>
+	 &nbsp; &nbsp;&nbsp;<img width="1280" src="https://baks.dev/upload/iblock/131/1316b2634f06a4fe89c3b0828d33e4ed.jpeg" height="579"><br>
+ <br>
+	<h3 class="2-editing-user-profile">2. Редактирование профиля пользователя&nbsp;</h3>
+	<p>
+		 Первое, что вы хотите сделать, это отредактировать свой профиль пользователя. Нажмите на аватар пользователя (в верхнем правом углу) и в раскрывающемся меню выберите <code>Settings</code>:
+	</p>
+ <br>
+	 &nbsp; &nbsp;&nbsp;<img src="https://baks.dev/upload/iblock/2d6/2d6c224b310a91d0b1ce2a7e75b9ab37.jpeg"><br>
+ <br>
+	<p>
+		 Здесь вы можете изменить свое имя, адрес электронной почты и другую информацию профиля и настройки. Внесите изменения по своему вкусу.
+	</p>
+ <br>
+	 &nbsp; &nbsp;&nbsp;<img src="https://baks.dev/upload/iblock/32b/32b1d47a5dd18b04b4eb8d85e1d31efc.jpeg"><br>
+ <br>
+	<p>
+		 Когда вы закончите, нажмите на <code>Update Profile settings&nbsp;</code>кнопку, и вскоре вы получите подтверждение по электронной почте на адрес, который вы указали. Чтобы подтвердить свой аккаунт, следуйте инструкциям, указанным в электронном письме.
+	</p>
+	<h3 class="3-changing-username"><br>
+	 3. Изменение имени пользователя&nbsp;</h3>
+	<p>
+		 Чтобы получить доступ к странице профиля, нажмите на <code>Account&nbsp;</code>ссылку в левом вертикальном меню навигации.
+	</p>
+	<p>
+		 Как вы уже знаете, имя пользователя по умолчанию для первой учетной записи администратора <code>root</code>. Чтобы изменить его, просто введите новое имя пользователя и нажмите на <code>Update username&nbsp;</code>кнопку.
+	</p>
+ <br>
+	 &nbsp; &nbsp;&nbsp;<img src="https://baks.dev/upload/iblock/eb9/eb9973d881caa93dac7018a3a532d877.jpeg"><br>
+ <br>
+	<p>
+		 На этом экране вы также можете включить двухфакторную аутентификацию.
+	</p>
+	<p>
+		 В следующий раз, когда вы войдете в свою панель управления GitLab, вам нужно будет ввести новое имя пользователя.
+	</p>
+	<h3 class="4-adding-ssh-key"><br>
+	 4. Добавление ключа SSH&nbsp;</h3>
+	<p>
+		 Чтобы иметь возможность отправить свои локальные изменения git на сервер GitLab, вы должны добавить свой открытый ключ SSH в свою учетную запись GitLab.
+	</p>
+	<p>
+		 Если у вас уже есть пара ключей SSH, созданная в вашей локальной системе, вы можете отобразить открытый ключ, набрав: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">cat ~/.ssh/id_rsa.pub</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp; Вывод должен выглядеть примерно так:<br>
+ <br>
+	</p>
+	 <pre><code class="language-output" data-lang="output">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDd/mnMzHwjUzK8g3ldfsfRpJuC16mhWamaXRk8ySQrD/dzpbRLfDnZsLxCzRoq+ZzFHGwcQlJergtergdHGRrO8FE5jl3IWRRp+mP12qYw== admin@baks.dev
+</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp; Если команда, приведенная выше, печатает, <code>No such file or directory&nbsp;</code>это означает, что на вашем компьютере не сгенерирована пара ключей SSH.
+	</p>
+	<p>
+		 Для генерации новой пары ключей SSH используйте следующую команду: <br>
+ <br>
+	</p>
+	 <pre class="terminal"><code class="terminal-line" prefix="$">ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"</code></pre>
+	<p>
+ <br>
+		 &nbsp; &nbsp; Скопируйте вывод команды <a href="https://baks.dev/search.php?tags=cat">cat</a> и вернитесь в веб-интерфейс GitLab. Нажмите <code>SSH Keys&nbsp;</code>в левом вертикальном меню навигации, чтобы перейти на страницу конфигурации ключей SSH.
+	</p>
+	<p>
+		 В <code>Key</code>текстовой области вставьте открытый ключ, который вы ранее скопировали с вашего локального компьютера, установите описательный заголовок и нажмите на <code>Add key&nbsp;</code>кнопку:
+	</p>
+ <br>
+	 &nbsp; &nbsp;&nbsp;<img src="https://baks.dev/upload/iblock/45a/45acbff39fc7c31da1a32ae474251c54.jpeg"><br>
+ <br>
+	<p>
+		 Теперь вы сможете загружать изменения проекта с локального компьютера, не предоставляя учетные данные своей учетной записи GitLab.<span class="ezoic-pub-ad-placeholder-148"></span><span style="display:block !important;float:none;margin-bottom:15px !important;margin-left:0px !important;margin-right:0px !important;margin-top:15px !important;min-width:160px;text-align:center !important;" class="ezoic-ad link-v-med-1 adtester-container adtester-container-148"></span>
+	</p>
+	<p>
+	</p>
+	<h2 class="conclusion"><br>
+	 Вывод&nbsp;</h2>
+	<p>
+		 Из этого туториала вы узнали, как установить и настроить GitLab на CentOS 7. Вы также узнали, как редактировать настройки своего профиля, как изменить имя пользователя и добавить ключ SSH. Теперь вы можете создать свой первый проект и начать использовать GitLab.
+	</p>
+</div>
+ <br>                    </div>
+
+
+
+
+
+
+
+
+                    <!--POST TAG-->
+                    
+
+
+
+
+
+
+
+                    <!--POST AUTHOR-->
+                    <!--<div class="post-author-block clearfix">
+                        <img width="107" height="107" class="avatar" src="https://baks.dev/article/centos/images/blog/thumbnail/blog-img8.jpg" alt="Shane Doe">
+                        <div class="content">
+
+										<span class="author alt-text fw900">
+											<a rel="author" title="Posts by Shane Doe" href="https://baks.dev/article/centos/how-to-install-and-configure-gitlab-on-centos-7#">Shane Doe</a>
+										</span>
+                            <p class="author-bio">Stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan
+                                exercitation, photo booth et 8-bit kale chips proident chillwave.</p>
+                            <ul class="social-icons">
+                                <li>
+                                    <a title="" href="https://baks.dev/article/centos/how-to-install-and-configure-gitlab-on-centos-7#"><i class="fab fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a title="" href="https://baks.dev/article/centos/how-to-install-and-configure-gitlab-on-centos-7#"><i class="fab fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a title="" href="https://baks.dev/article/centos/how-to-install-and-configure-gitlab-on-centos-7#"><i class="fab fa-twitter"></i></a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+
+
+
+
+
+
+
+
+                    <!--</div>-->
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </main></div>
+    
+
+
+
+
+ 
+
+			<footer class="page-section black-section pt-30 pb-30 center-xs">
+				<div class="copyright fw300 mb-sm-10"><span>© BAKS.dev 2019 </span></div>
+
+                <!--<a href="https://webmaster.yandex.ru/siteinfo/?site=baks.dev">
+                    <img width="88" height="31" alt="" border="0" src="https://yandex.ru/cycounter?baks.dev&theme=light&lang=ru"/>
+                </a>-->
+
+
+                <noscript><div><img src="https://mc.yandex.ru/watch/57090256" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+                				<div class="scroll-to-top">
+					<div class="valign">
+						<i class="dripicons-arrow-thin-up"></i>
+					</div>
+				</div>
+			</footer>
+
+
+
+
+
+
+		
+
+	
+
+
+
+<!---->
+
+<!---->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<link rel="stylesheet" href="https://baks.dev/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://baks.dev/css/animate.min.css"/>
+<link rel="stylesheet" href="https://baks.dev/fonts/fontawesome/css/all.css"/>
+<link rel="stylesheet" href="https://baks.dev/css/iconfont.css"/>
+<link rel="stylesheet" href="https://baks.dev/css/magnific-popup.css"/>
+<link rel="stylesheet" href="https://baks.dev/css/tipso.min.css"/>
+<link rel="stylesheet" href="https://baks.dev/css/swiper.min.css">
+<link rel="stylesheet" href="https://baks.dev/css/style.css"/>
+<link rel="stylesheet" href="https://baks.dev/css/padding-margin.css"/>
+<link rel="stylesheet" href="https://baks.dev/css/YTPlayer.css"/>-->
+
+
+
+
+
+
+
+
+
+
+
+<!-- Yandex.Metrika counter -->
+
+<noscript><div><img src="https://mc.yandex.ru/watch/70374397" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+
+
+<script type="text/javascript">if(!window.BX)window.BX={};if(!window.BX.message)window.BX.message=function(mess){if(typeof mess=='object') for(var i in mess) BX.message[i]=mess[i]; return true;};</script>
+<script type="text/javascript">(window.BX||top.BX).message({'JS_CORE_LOADING':'Загрузка...','JS_CORE_NO_DATA':'- Нет данных -','JS_CORE_WINDOW_CLOSE':'Закрыть','JS_CORE_WINDOW_EXPAND':'Развернуть','JS_CORE_WINDOW_NARROW':'Свернуть в окно','JS_CORE_WINDOW_SAVE':'Сохранить','JS_CORE_WINDOW_CANCEL':'Отменить','JS_CORE_WINDOW_CONTINUE':'Продолжить','JS_CORE_H':'ч','JS_CORE_M':'м','JS_CORE_S':'с','JSADM_AI_HIDE_EXTRA':'Скрыть лишние','JSADM_AI_ALL_NOTIF':'Показать все','JSADM_AUTH_REQ':'Требуется авторизация!','JS_CORE_WINDOW_AUTH':'Войти','JS_CORE_IMAGE_FULL':'Полный размер'});</script><script type="text/javascript" src="https://baks.dev/bitrix/js/main/core/core.min.js?1587927876246515"></script><script>BX.setJSList(['/bitrix/js/main/core/core_ajax.js','/bitrix/js/main/core/core_promise.js','/bitrix/js/main/polyfill/promise/js/promise.js','/bitrix/js/main/loadext/loadext.js','/bitrix/js/main/loadext/extension.js','/bitrix/js/main/polyfill/promise/js/promise.js','/bitrix/js/main/polyfill/find/js/find.js','/bitrix/js/main/polyfill/includes/js/includes.js','/bitrix/js/main/polyfill/matches/js/matches.js','/bitrix/js/ui/polyfill/closest/js/closest.js','/bitrix/js/main/polyfill/fill/main.polyfill.fill.js','/bitrix/js/main/polyfill/find/js/find.js','/bitrix/js/main/polyfill/matches/js/matches.js','/bitrix/js/main/polyfill/core/dist/polyfill.bundle.js','/bitrix/js/main/polyfill/core/dist/polyfill.bundle.js','/bitrix/js/main/lazyload/dist/lazyload.bundle.js','/bitrix/js/main/polyfill/core/dist/polyfill.bundle.js','/bitrix/js/main/parambag/dist/parambag.bundle.js']);
+BX.setCSSList(['/bitrix/js/main/lazyload/dist/lazyload.bundle.css','/bitrix/js/main/parambag/dist/parambag.bundle.css']);</script>
+<script type="text/javascript">(window.BX||top.BX).message({'LANGUAGE_ID':'ru','FORMAT_DATE':'DD.MM.YYYY','FORMAT_DATETIME':'DD.MM.YYYY HH:MI:SS','COOKIE_PREFIX':'BITRIX_SM','SERVER_TZ_OFFSET':'10800','SITE_ID':'s1','SITE_DIR':'/','USER_ID':'','SERVER_TIME':'1614180985','USER_TZ_OFFSET':'0','USER_TZ_AUTO':'Y','bitrix_sessid':'7e4354cbfebf24b0827a81c7fb919608'});</script><script type="text/javascript" src="https://baks.dev/bitrix/cache/js/s1/baks.dev/kernel_main/kernel_main_v1.js?1598740277201799"></script>
+<script type="text/javascript" src="https://baks.dev/bitrix/js/main/core/core_popup.js?158792787676608"></script>
+<script type="text/javascript">BX.setJSList(['/bitrix/js/main/session.js','/bitrix/js/main/core/core_window.js','/bitrix/js/main/date/main.date.js','/bitrix/js/main/core/core_date.js','/bitrix/js/main/utils.js','/bitrix/js/main/core/core_fx.js','/bitrix/js/main/rating_like.js','/local/templates/baks.dev/components/bitrix/catalog.comments/baks_comments/script.js','/bitrix/components/arturgolubev/search.title/script.js','/local/templates/baks.dev/components/arturgolubev/search.title/baks_search_top/script.js']); </script>
+<script type="text/javascript">BX.setCSSList(['/local/templates/baks.dev/components/bitrix/catalog/baks_article/bitrix/catalog.element/.default/style.css','/local/templates/baks.dev/components/arturgolubev/yandex.share/baks_share_social/style.css','/local/templates/baks.dev/components/bitrix/catalog.comments/baks_comments/style.css','/bitrix/components/bitrix/blog/templates/.default/style.css','/bitrix/components/bitrix/blog/templates/.default/themes/green/style.css','/bitrix/components/bitrix/rating.vote/templates/like/popup.css','/bitrix/components/bitrix/rating.vote/templates/like/style.css','/local/templates/baks.dev/components/bitrix/catalog.comments/baks_comments/themes/black/style.css','/local/templates/baks.dev/components/bitrix/news.list/baks_footer_contact/style.css','/local/templates/baks.dev/components/bitrix/news.list/baks_footer_social/style.css','/local/templates/baks.dev/components/bitrix/menu/baks_footer_menu/style.css','/local/templates/baks.dev/components/bitrix/menu/baks_footer_pricedesc/style.css','/local/templates/baks.dev/components/bitrix/menu/baks_topmenu/style.css','/local/templates/baks.dev/components/arturgolubev/search.title/baks_search_top/style.css','/local/templates/baks.dev/styles.css','/local/templates/baks.dev/template_styles.css']); </script>
+<script src="https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+<script src="https://yastatic.net/share2/share.js"></script>
+
+
+
+<script type="text/javascript" src="https://baks.dev/bitrix/cache/js/s1/baks.dev/template_84aae0c1154bfcf90ae2f04fa04df409/template_84aae0c1154bfcf90ae2f04fa04df409_v1.js?159873919613729"></script>
+<script type="text/javascript" src="https://baks.dev/bitrix/cache/js/s1/baks.dev/page_05571ee8b8940a97bd24442500a4640f/page_05571ee8b8940a97bd24442500a4640f_v1.js?15987402776450"></script>
+<script type="text/javascript">var _ba = _ba || []; _ba.push(["aid", "0cf92a34de9501ce739a6645102fed47"]); _ba.push(["host", "baks.dev"]); (function() {var ba = document.createElement("script"); ba.type = "text/javascript"; ba.async = true;ba.src = (document.location.protocol == "https:" ? "https://" : "http://") + "bitrix.info/ba.js";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ba, s);})();</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script><script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-154155704-1');
+    </script><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-7201355429655000",
+            enable_page_level_ads: true
+        });
+    </script><script>
+	BX.ready(function(){
+		new JCTitleSearchAG({
+			'AJAX_PAGE' : '/article/centos/how-to-install-and-configure-gitlab-on-centos-7',
+			'CONTAINER_ID': 'smart-title-search',
+			'INPUT_ID': 'smart-title-search-input',
+			'PRELODER_ID': 'smart-title-search_preloader_item',
+			'MIN_QUERY_LEN': 2
+		});
+	});
+</script><script type="text/javascript">
+                            var obCatalogComments_583 = new JCCatalogSocnetsComments({'serviceList':{'blog':true},'settings':{'blog':{'ajaxUrl':'/local/templates/baks.dev/components/bitrix/catalog.comments/baks_comments/ajax.php?IBLOCK_ID=12&ELEMENT_ID=583&SITE_ID=s1','ajaxParams':[],'contID':'bx-cat-soc-comments-blg_583'}},'tabs':{'activeTabId':'BLOG','tabsContId':'soc_comments_583','tabList':['BLOG']}});
+                        </script><script async="" src="https://baks.dev/js/jquery-3.3.1.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.easing.min.js"></script><script async="" src="https://baks.dev/js/bootstrap.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.scrollTo.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.localScroll.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.viewport.mini.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.sticky.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.fitvids.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/equalize.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.parallax-1.1.3.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.zoom.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/isotope.pkgd.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/imagesloaded.pkgd.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/masonry.pkgd.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.magnific-popup.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/tipso.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/wow.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/script.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/swiper.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/home-init.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/text-slider.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/jquery.mb.YTPlayer.js"></script><script async="" src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.19.1/trumbowyg.min.js"></script><script async="" src="https://baks.dev/local/templates/baks.dev/js/lazysizes.min.js"></script><script async="" src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"></script><script>
+    window.onload = function() {
+
+        // $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/bootstrap.min.css"/>');
+        $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/animate.min.css"/>');
+        $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/fonts/fontawesome/css/all.css"/>');
+        $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/iconfont.css"/>');
+        $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/magnific-popup.css"/>');
+        //$("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/tipso.min.css"/>');
+        //$("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/swiper.min.css">');
+        //$("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/style.css"/>');
+        $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/padding-margin.css"/>');
+        $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/YTPlayer.css"/>');
+        $("head").append('<link rel="stylesheet" href="https://baks.dev/local/templates/baks.dev/css/YTPlayer.css"/>');
+
+
+
+       // $("head").append('<script async src="https://baks.dev/local/templates/baks.dev/js/lazysizes.min.js"><\/script>');
+        //$("head").append('<script async src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"><\/script>');
+
+
+
+        /*$('.item').each(function(i){
+            if(this.getAttribute('data-style')) {
+                this.setAttribute('style',this.getAttribute('data-style'));
+                this.removeAttribute('data-style');
+            }
+        });*/
+
+
+
+    };
+</script>
+
+</body>
+
+
+</html>
+
