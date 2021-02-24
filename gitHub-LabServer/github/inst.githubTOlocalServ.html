@@ -1,0 +1,1061 @@
+ <!DOCTYPE html>
+<html lang="ru-RU" prefix="og: //ogp.me/ns# fb: //ogp.me/ns/fb#">
+<head><style>img.lazy{min-height:1px}</style><link rel="preload" href="https://andreyex.ru/wp-content/plugins/w3-total-cache/pub/js/lazyload.min.js?x13673" as="script">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="shortcut icon" href="https://andreyex.ru/favicon.ico?x13673" />
+	
+	<!-- This site is optimized with the Yoast SEO plugin v15.8 - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>Как настроить Git-сервер на Linux</title>
+	<meta name="description" content="Когда дело доходит до хостинга Git, у вас есть несколько доступных вариантов. GitHub, Gitlab и Bitbucket являются популярными решениями, но стоит" />
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+	<link rel="canonical" href="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":["Person","Organization"],"@id":"https://andreyex.ru/#/schema/person/778934ab9a45d2cdeb73844a46e1e6f9","name":"admin","image":{"@type":"ImageObject","@id":"https://andreyex.ru/#personlogo","inLanguage":"ru-RU","url":"https://andreyex.ru/wp-content/uploads/2019/07/IMG_20190617_081947.jpg","width":4016,"height":3008,"caption":"admin"},"logo":{"@id":"https://andreyex.ru/#personlogo"},"sameAs":["https://andreyex.ru"]},{"@type":"WebSite","@id":"https://andreyex.ru/#website","url":"https://andreyex.ru/","name":"\u0418\u0422 \u0411\u043b\u043e\u0433. \u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432 \u043d\u0430 \u043e\u0441\u043d\u043e\u0432\u0435 Linux (Ubuntu, Debian, CentOS, openSUSE)","description":"\u041e\u043a\u0430\u0437\u044b\u0432\u0430\u0435\u043c \u0443\u0441\u043b\u0443\u0433\u0438 \u0441\u0430\u0439\u0442\u0430\u043c \u0436\u0435\u043b\u0430\u044e\u0449\u0438\u043c \u043f\u043e\u043f\u0430\u0441\u0442\u044c \u0432 \u0422\u041e\u041f \u043f\u043e\u0438\u0441\u043a\u0430 Yandex, Google. \u0420\u0430\u0437\u0432\u0438\u0432\u0430\u0435\u043c \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u044b \u0432 \u0441\u043e\u0446. \u0441\u0435\u0442\u044f\u0445","publisher":{"@id":"https://andreyex.ru/#/schema/person/778934ab9a45d2cdeb73844a46e1e6f9"},"potentialAction":[{"@type":"SearchAction","target":"https://andreyex.ru/?s={search_term_string}","query-input":"required name=search_term_string"}],"inLanguage":"ru-RU"},{"@type":"ImageObject","@id":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#primaryimage","inLanguage":"ru-RU","url":"https://andreyex.ru/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git.jpg","width":1600,"height":666,"caption":"\u041a\u0430\u043a \u0441\u043e\u0437\u0434\u0430\u0442\u044c \u0438 \u043f\u0435\u0440\u0435\u0447\u0438\u0441\u043b\u0438\u0442\u044c \u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0435 \u0438 \u0443\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0435 \u0432\u0435\u0442\u043a\u0438 Git"},{"@type":"WebPage","@id":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#webpage","url":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/","name":"\u041a\u0430\u043a \u043d\u0430\u0441\u0442\u0440\u043e\u0438\u0442\u044c Git-\u0441\u0435\u0440\u0432\u0435\u0440 \u043d\u0430 Linux","isPartOf":{"@id":"https://andreyex.ru/#website"},"primaryImageOfPage":{"@id":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#primaryimage"},"datePublished":"2019-10-02T15:31:20+00:00","dateModified":"2019-10-02T15:31:20+00:00","description":"\u041a\u043e\u0433\u0434\u0430 \u0434\u0435\u043b\u043e \u0434\u043e\u0445\u043e\u0434\u0438\u0442 \u0434\u043e \u0445\u043e\u0441\u0442\u0438\u043d\u0433\u0430 Git, \u0443 \u0432\u0430\u0441 \u0435\u0441\u0442\u044c \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u0445 \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432.\u00a0GitHub, Gitlab \u0438 Bitbucket \u044f\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u043f\u043e\u043f\u0443\u043b\u044f\u0440\u043d\u044b\u043c\u0438 \u0440\u0435\u0448\u0435\u043d\u0438\u044f\u043c\u0438, \u043d\u043e \u0441\u0442\u043e\u0438\u0442","breadcrumb":{"@id":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#breadcrumb"},"inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/"]}]},{"@type":"BreadcrumbList","@id":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"WebPage","@id":"https://andreyex.ru/","url":"https://andreyex.ru/","name":"\u0413\u043b\u0430\u0432\u043d\u043e\u0435 \u043c\u0435\u043d\u044e"}},{"@type":"ListItem","position":2,"item":{"@type":"WebPage","@id":"https://andreyex.ru/operacionnaya-sistema-linux/","url":"https://andreyex.ru/operacionnaya-sistema-linux/","name":"\u041e\u043f\u0435\u0440\u0430\u0446\u0438\u043e\u043d\u043d\u0430\u044f \u0441\u0438\u0441\u0442\u0435\u043c\u0430 Linux"}},{"@type":"ListItem","position":3,"item":{"@type":"WebPage","@id":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/","url":"https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/","name":"\u041a\u0430\u043a \u043d\u0430\u0441\u0442\u0440\u043e\u0438\u0442\u044c Git-\u0441\u0435\u0440\u0432\u0435\u0440 \u043d\u0430 Linux"}}]}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel="amphtml" href="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/amp/" /><meta name="generator" content="AMP for WP 1.0.76"/><link rel='dns-prefetch' href='https://s.w.org/' />
+<link rel="alternate" type="application/rss+xml" title="ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE) &raquo; Лента" href="https://andreyex.ru/feed/" />
+<link rel="alternate" type="application/rss+xml" title="ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE) &raquo; Лента комментариев" href="https://andreyex.ru/comments/feed/" />
+<link rel='stylesheet' id='wpfp-css' href='https://andreyex.ru/wp-content/plugins/wp-favorite-posts/wpfp.css?x13673' type='text/css' />
+
+		<style type="text/css">
+			.mistape-test, .mistape_mistake_inner {color: #E42029 !important;}
+			#mistape_dialog h2::before, #mistape_dialog .mistape_action, .mistape-letter-back {background-color: #E42029 !important; }
+			#mistape_reported_text:before, #mistape_reported_text:after {border-color: #E42029 !important;}
+            .mistape-letter-front .front-left {border-left-color: #E42029 !important;}
+            .mistape-letter-front .front-right {border-right-color: #E42029 !important;}
+            .mistape-letter-front .front-bottom, .mistape-letter-back > .mistape-letter-back-top, .mistape-letter-top {border-bottom-color: #E42029 !important;}
+            .mistape-logo svg {fill: #E42029 !important;}
+		</style>
+		<link rel='stylesheet' id='sunrain-style-css'  href='https://andreyex.ru/wp-content/plugins/bwp-minify/min/?f=wp-content/themes/sunrain/style.css&#038;ver=' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-library-group-css' href='https://andreyex.ru/wp-content/plugins/bwp-minify/min/?f=wp-includes/css/dist/block-library/style.min.css,wp-content/plugins/simple-sitemap/lib/assets/css/simple-sitemap.css,wp-content/plugins/ax-scrollto-top/ax-scrollto-top.css,wp-content/plugins/comments-like-dislike/css/fontawesome/css/all.min.css,wp-content/plugins/comments-like-dislike/css/cld-frontend.css,wp-content/plugins/post-views-counter/css/frontend.css,wp-content/plugins/styles-for-wp-pagenavi-addon/assets/css/sfwppa-style.css,wp-content/plugins/worth-the-read/css/wtr.css,wp-content/plugins/wp-polls/polls-css.css,wp-content/plugins/wp-postratings/css/postratings-css.css,wp-content/plugins/mailchimp-for-wp/assets/css/form-themes.min.css,wp-content/plugins/wp-pagenavi/pagenavi-css.css,wp-content/plugins/mistape/assets/css/mistape-front.css,wp-content/themes/sunrain/css/bootstrap.min.css,wp-content/themes/sunrain/css/magnific-popup.min.css,wp-content/themes/sunrain/style-responsive.css,wp-content/themes/sunrain/css/component.css,wp-content/plugins/wp-simple-firewall/resources/css/chartist.min.css,wp-content/plugins/wp-simple-firewall/resources/css/chartist-plugin-legend.css&#038;ver=1613811588' type='text/css' media='all' />
+<style id='wp-polls-inline-css' type='text/css'>
+.wp-polls .pollbar {
+	margin: 1px;
+	font-size: 8px;
+	line-height: 10px;
+	height: 10px;
+	background-image: url('https://andreyex.ru/wp-content/plugins/wp-polls/images/default_gradient/pollbg.gif');
+	border: 1px solid #c8c8c8;
+}
+
+</style>
+<link rel='stylesheet' id='dashicons-css'  href='https://andreyex.ru/wp-includes/css/dashicons.min.css?x13673' type='text/css' media='all' />
+<link rel='stylesheet' id='fancybox-group-css' href='https://andreyex.ru/wp-content/plugins/bwp-minify/min/?f=wp-content/plugins/easy-fancybox/css/jquery.fancybox.min.css&#038;ver=1613811588' type='text/css' media='screen' />
+<script type='text/javascript' src='https://andreyex.ru/wp-content/plugins/bwp-minify/min/?f=wp-content/themes/sunrain/js/jquery.min.js&#038;ver=1613811588' id='jquery-js'></script>
+<script type='text/javascript' src='https://andreyex.ru/wp-content/plugins/bwp-minify/min/?f=wp-content/plugins/wp-favorite-posts/script.js&#038;ver=1613811588' id='wp-favorite-posts-js'></script>
+<script type='text/javascript' id='cld-frontend-js-extra'>
+/* <![CDATA[ */
+var cld_js_object = {"admin_ajax_url":"https:\/\/andreyex.ru\/wp-admin\/admin-ajax.php","admin_ajax_nonce":"9a8dcb4407"};
+/* ]]> */
+</script>
+<script type='text/javascript' id='iw-no-right-click-js-extra'>
+/* <![CDATA[ */
+var IwNRCargs = {"rightclick":"Y","draganddrop":"Y"};
+/* ]]> */
+</script>
+<script type='text/javascript' id='icwp-wpsf-shield-antibot-js-extra'>
+/* <![CDATA[ */
+var icwp_wpsf_vars_lpantibot = {"form_selectors":"","uniq":"603682457f670","cbname":"icwp-wpsf-5f55b7d76a59d","strings":{"label":"\u042f - \u0447\u0435\u043b\u043e\u0432\u0435\u043a.","alert":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0441\u0442\u0430\u0432\u044c\u0442\u0435 \u0433\u0430\u043b\u043e\u0447\u043a\u0443, \u0447\u0442\u043e\u0431\u044b \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c, \u0447\u0442\u043e \u0412\u044b - \u0447\u0435\u043b\u043e\u0432\u0435\u043a.","loading":"\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430"},"flags":{"gasp":true,"captcha":false}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://andreyex.ru/wp-content/plugins/bwp-minify/min/?f=wp-content/plugins/comments-like-dislike/js/cld-frontend.js,wp-content/plugins/image-watermark/js/no-right-click.js,wp-content/plugins/easy-fancybox/js/jquery.fancybox.min.js,wp-content/plugins/easy-fancybox/js/jquery.easing.min.js,wp-content/plugins/easy-fancybox/js/jquery.mousewheel.min.js,wp-content/plugins/wp-simple-firewall/resources/js/shield-antibot.js,wp-content/plugins/wp-simple-firewall/resources/js/chartist.min.js,wp-content/plugins/wp-simple-firewall/resources/js/chartist-plugin-legend.js,wp-content/plugins/wp-simple-firewall/resources/js/charts.js,wp-content/plugins/wp-simple-firewall/resources/js/shuffle.js,wp-content/plugins/wp-simple-firewall/resources/js/shield-card-shuffle.js&#038;ver=1613811588'></script>
+<link rel="https://api.w.org/" href="https://andreyex.ru/wp-json/" /><link rel="alternate" type="application/json" href="https://andreyex.ru/wp-json/wp/v2/pages/62513" /><link rel="alternate" type="application/json+oembed" href="https://andreyex.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fandreyex.ru%2Foperacionnaya-sistema-linux%2Fkak-nastroit-git-server-na-linux%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://andreyex.ru/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fandreyex.ru%2Foperacionnaya-sistema-linux%2Fkak-nastroit-git-server-na-linux%2F&#038;format=xml" />
+<style>a.cld-like-dislike-trigger {color: #dd1a1a;}</style><style type="text/css">
+			.wpsdc-drop-cap {
+				float : left;				
+				padding : 0.25em 0.05em 0.25em 0;				
+				font-size : 5em;
+				line-height : 0.4em;color : #dd3333;}
+		</style><style type="text/css">.wtr-time-wrap{ 
+	/* wraps the entire label */
+	margin: 0 10px;
+
+}
+.wtr-time-number{ 
+	/* applies only to the number */
+	
+}</style><style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><style>
+/* kwsmiles preset */
+.kws-wrapper{ position:relative; z-index:99; }
+.sm_list{ z-index:9999; position:absolute; bottom:.3em; left:.3em; }
+.sm_container{
+	display:none; position:absolute; top:0; left:0; box-sizing:border-box;
+	width:410px; background:#fff; padding:5px;
+	border-radius:2px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+	max-height:200px; overflow-y:auto; overflow-x:hidden;
+}
+.sm_container:after{ content:''; display:table; clear:both; }
+.sm_container .smiles_button{ cursor:pointer; width:50px; height:35px; display:block; float:left; background-position:center center; background-repeat:no-repeat; /*background-size:contain;*/ }
+.sm_container .smiles_button:hover{ background-color:rgba(200, 222, 234, 0.32); }
+.kws-smiley{ display:inline !important; border:none !important; box-shadow:none !important; background:none !important; padding:0; margin:0 .07em !important; vertical-align:-0.4em !important;
+}
+
+.sm_list.topright{ top:.3em; right:.3em; bottom:auto; left:auto; }
+.sm_list.topright .sm_container{ right:0; left:auto; }
+.sm_list.bottomright{ top:auto; right:.3em; bottom:.3em; left:auto; }
+.sm_list.bottomright .sm_container{ top:auto; right:0; bottom:0; left:auto; }
+
+.sm_list.skype_big, .sm_list.skype_big .smiles_button{ background-size:contain; }
+
+</style><style type="text/css">.broken_link, a.broken_link {
+	text-decoration: line-through;
+}</style><script type="text/javascript">var fb_timeout, fb_opts={'overlayShow':true,'hideOnOverlayClick':true,'showCloseButton':true,'margin':20,'centerOnScroll':true,'enableEscapeButton':true,'autoScale':true };
+if(typeof easy_fancybox_handler==='undefined'){
+var easy_fancybox_handler=function(){
+jQuery('.nofancybox,a.wp-block-file__button,a.pin-it-button,a[href*="pinterest.com/pin/create"],a[href*="facebook.com/share"],a[href*="twitter.com/share"]').addClass('nolightbox');
+/* IMG */
+var fb_IMG_select='a[href*=".jpg"]:not(.nolightbox,li.nolightbox>a),area[href*=".jpg"]:not(.nolightbox),a[href*=".jpeg"]:not(.nolightbox,li.nolightbox>a),area[href*=".jpeg"]:not(.nolightbox),a[href*=".png"]:not(.nolightbox,li.nolightbox>a),area[href*=".png"]:not(.nolightbox),a[href*=".gif"]:not(.nolightbox,li.nolightbox>a),area[href*=".gif"]:not(.nolightbox),a[href*=".svg"]:not(.nolightbox,li.nolightbox>a),area[href*=".svg"]:not(.nolightbox)';
+jQuery(fb_IMG_select).addClass('fancybox image');
+var fb_IMG_sections=jQuery('.gallery,.wp-block-gallery,.tiled-gallery,.wp-block-jetpack-tiled-gallery');
+fb_IMG_sections.each(function(){jQuery(this).find(fb_IMG_select).attr('rel','gallery-'+fb_IMG_sections.index(this));});
+jQuery('a.fancybox,area.fancybox,li.fancybox a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'image','transitionIn':'elastic','easingIn':'easeOutBack','transitionOut':'elastic','easingOut':'easeInBack','opacity':false,'hideOnContentClick':true,'titleShow':true,'titlePosition':'over','titleFromAlt':true,'showNavArrows':true,'enableKeyboardNav':true,'cyclic':false}))});
+/* Inline */
+jQuery('a.fancybox-inline,area.fancybox-inline,li.fancybox-inline a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'inline','autoDimensions':true,'scrolling':'no','easingIn':'easeOutBack','easingOut':'easeInBack','opacity':false,'hideOnContentClick':false,'titleShow':false}))});
+/* PDF */
+jQuery('a[href*=".pdf"],area[href*=".pdf"],a[href*=".PDF"],area[href*=".PDF"]').not('.nolightbox,li.nolightbox>a').addClass('fancybox-pdf');
+jQuery('a.fancybox-pdf,area.fancybox-pdf,li.fancybox-pdf a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'iframe','onStart':function(a,i,o){o.type='pdf';},'width':'90%','height':'90%','padding':10,'titleShow':false,'titlePosition':'float','titleFromAlt':true,'autoDimensions':false,'scrolling':'no'}))});
+/* SWF */
+jQuery('a[href*=".swf"],area[href*=".swf"],a[href*=".SWF"],area[href*=".SWF"]').not('.nolightbox,li.nolightbox>a').addClass('fancybox-swf');
+jQuery('a.fancybox-swf,area.fancybox-swf,li.fancybox-swf a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'swf','width':680,'height':495,'titleShow':false,'titlePosition':'float','titleFromAlt':true,'swf':{'wmode':'opaque','allowfullscreen':true}}))});
+/* SVG */
+jQuery('a[href*=".svg"],area[href*=".svg"],a[href*=".SVG"],area[href*=".SVG"]').not('.nolightbox,li.nolightbox>a').addClass('fancybox-svg');
+jQuery('a.fancybox-svg,area.fancybox-svg,li.fancybox-svg a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'svg','width':680,'height':495,'titleShow':false,'titlePosition':'float','titleFromAlt':true,'svg':{'wmode':'opaque','allowfullscreen':true}}))});
+/* YouTube */
+jQuery('a[href*="youtu.be/"],area[href*="youtu.be/"],a[href*="youtube.com/"],area[href*="youtube.com/"]').filter(function(){return this.href.match(/\/(?:youtu\.be|watch\?|embed\/)/);}).not('.nolightbox,li.nolightbox>a').addClass('fancybox-youtube');
+jQuery('a.fancybox-youtube,area.fancybox-youtube,li.fancybox-youtube a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'iframe','width':640,'height':360,'keepRatio':1,'titleShow':false,'titlePosition':'float','titleFromAlt':true,'onStart':function(a,i,o){var splitOn=a[i].href.indexOf("?");var urlParms=(splitOn>-1)?a[i].href.substring(splitOn):"";o.allowfullscreen=(urlParms.indexOf("fs=0")>-1)?false:true;o.href=a[i].href.replace(/https?:\/\/(?:www\.)?youtu(?:\.be\/([^\?]+)\??|be\.com\/watch\?(.*(?=v=))v=([^&]+))(.*)/gi,"https://www.youtube.com/embed/$1$3?$2$4&autoplay=1");}}))});
+/* Vimeo */
+jQuery('a[href*="vimeo.com/"],area[href*="vimeo.com/"]').filter(function(){return this.href.match(/\/(?:[0-9]+|video\/)/);}).not('.nolightbox,li.nolightbox>a').addClass('fancybox-vimeo');
+jQuery('a.fancybox-vimeo,area.fancybox-vimeo,li.fancybox-vimeo a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'iframe','width':500,'height':281,'keepRatio':1,'titleShow':false,'titlePosition':'float','titleFromAlt':true,'onStart':function(a,i,o){var splitOn=a[i].href.indexOf("?");var urlParms=(splitOn>-1)?a[i].href.substring(splitOn):"";o.allowfullscreen=(urlParms.indexOf("fullscreen=0")>-1)?false:true;o.href=a[i].href.replace(/https?:\/\/(?:www\.)?vimeo\.com\/([0-9]+)\??(.*)/gi,"https://player.vimeo.com/video/$1?$2&autoplay=1");}}))});
+/* Dailymotion */
+jQuery('a[href*="dailymotion.com/"],area[href*="dailymotion.com/"]').filter(function(){return this.href.match(/\/video\//);}).not('.nolightbox,li.nolightbox>a').addClass('fancybox-dailymotion');
+jQuery('a.fancybox-dailymotion,area.fancybox-dailymotion,li.fancybox-dailymotion a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'iframe','width':560,'height':315,'keepRatio':1,'titleShow':false,'titlePosition':'float','titleFromAlt':true,'onStart':function(a,i,o){var splitOn=a[i].href.indexOf("?");var urlParms=(splitOn>-1)?a[i].href.substring(splitOn):"";o.allowfullscreen=(urlParms.indexOf("fullscreen=0")>-1)?false:true;o.href=a[i].href.replace(/^https?:\/\/(?:www\.)?dailymotion.com\/video\/([^\?]+)(.*)/gi,"https://www.dailymotion.com/embed/video/$1?$2&autoPlay=1");}}))});
+/* iFrame */
+jQuery('a.fancybox-iframe,area.fancybox-iframe,li.fancybox-iframe a').each(function(){jQuery(this).fancybox(jQuery.extend({},fb_opts,{'type':'iframe','width':'70%','height':'90%','titleShow':false,'titlePosition':'float','titleFromAlt':true,'allowfullscreen':false}))});};
+jQuery('a.fancybox-close').on('click',function(e){e.preventDefault();jQuery.fancybox.close()});
+};
+var easy_fancybox_auto=function(){setTimeout(function(){jQuery('#fancybox-auto').trigger('click')},1000);};
+jQuery(easy_fancybox_handler);jQuery(document).on('post-load',easy_fancybox_handler);
+jQuery(easy_fancybox_auto);</script><style type="text/css">
+
+
+		/************************************************************
+						Style-1
+		************************************************************/
+		.sfwppa-navi-style.sfwppa-style-1 .sfwppa-pages, 
+		.sfwppa-navi-style.sfwppa-style-1 .wp-pagenavi .current,
+		.sfwppa-navi-style.sfwppa-style-1 .nav-links .current, 
+		.sfwppa-navi-style.sfwppa-style-1 .nav-links .page-numbers{font-size: 11px;color:#000000; border: 1px solid #dd3333;}
+		
+		.sfwppa-navi-style.sfwppa-style-1 .nav-links .current,
+		.sfwppa-navi-style.sfwppa-style-1 .wp-pagenavi .current{ background: #dd3333; color:#ffffff;  border-right: 1px solid #dd3333;}
+		
+		.sfwppa-navi-style.sfwppa-style-1 .sfwppa-pages:hover, 
+		.sfwppa-navi-style.sfwppa-style-1 .nav-links .page-numbers:hover { background: #dd3333;  border: 1px solid #dd3333; color:#d1d1d1;}
+		
+</style>
+<style type="text/css" title="dynamic-css" class="options-output">.wtr-time-wrap{line-height:16px;color:#CCCCCC;font-size:16px;opacity: 1;visibility: visible;-webkit-transition: opacity 0.24s ease-in-out;-moz-transition: opacity 0.24s ease-in-out;transition: opacity 0.24s ease-in-out;}.wf-loading .wtr-time-wrap{opacity: 0;}.ie.wf-loading .wtr-time-wrap{visibility: hidden;}</style>      
+	
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PMRKJSL');</script>
+<!-- End Google Tag Manager -->
+	
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PMRKJSL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<script data-ad-client="ca-pub-5929365381204095" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	
+<script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+</script>	
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(12704389, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true,
+        trackHash:true
+   });
+</script>
+
+<!-- /Yandex.Metrika counter -->
+
+</head>
+
+<body data-rsssl="1" class="page-template-default page page-id-62513 page-child parent-pageid-26877 sfwppa-navi-style sfwppa-style-1">
+  
+	<meta name="goodjo" content="9a56d0f799ec98d119486b2e0c441747">
+    
+   <div id="header">	
+   
+		<div class="container">
+		<div class="row">
+		
+			<div class="logotip col-sm-12 col-md-3 col-lg-3 col-xl-3">
+					<a href="https://andreyex.ru/"><img class="lazy loaded" src="https://andreyex.ru/wp-content/uploads/effect_mini_foto.png?x13673" data-src="https://andreyex.ru/wp-content/uploads/effect_mini_foto.png?x13673" title="ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE). Разработка сайтов на CMS Wordpress" alt="ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE). Разработка сайтов на CMS Wordpress" data-was-processed="true"></a>
+			</div>
+        
+			<div class="col-sm-12 col-md-9 col-lg-9 col-xl-9">
+				<div id="header-content">
+          
+					<!-- Site Titele and Description Goes Here -->    
+					<a href="https://andreyex.ru/" class="site-logo">
+						<div class="pricol"></div>
+					</a>
+		
+											<h3 class="site-title-hidden">
+							<a href="https://andreyex.ru/" title="ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE)" rel="home">ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE)</a>
+						</h3>
+							
+					<h2 class="site-title-h2">ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE)</h2>
+				</div>
+			</div>				
+			</div>	
+			</div>				
+			<div style="clear: both;"></div>
+
+		<div class="container">
+			
+			<!-- Site Main Menu Goes Here -->
+		    <div class="container">	
+
+<ul class="nav nav-pills justify-content-center">
+		<li class="nav-item">
+			<a class="nav-link" title="Создание и продвижение сайтов" href="https://andreyex.ru/category/uslugi/">Разработка сайтов</a>
+		</li>
+		 
+		<li class="nav-item">
+			<a class="nav-link" title="Создание и продвижение сайтов" href="https://andreyex.ru/category/seo/soc-seti/">Соц сети</a>
+		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link" title="Учебное пособие по Linux" href="https://andreyex.ru/operacionnaya-sistema-linux/">Linux</a>
+		</li>
+		 
+		  
+		<li class="nav-item">
+			<a class="nav-link" title="Учебное пособие по Wordpress" href="https://andreyex.ru/blog-platforma-wordpress/">Wordpress</a>
+		</li>
+		          
+		<li class="nav-item">
+			<a class="nav-link" title="Базы данных" href="https://andreyex.ru/bazy-dannyx/">Базы данных</a>
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" title="Учебное пособие по framework Bootstrap" href="https://andreyex.ru/uchebnoe-posobie-po-framework-bootstrap/">Bootstrap</a>
+		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link" title="Учебное пособие по Python 3" href="https://andreyex.ru/yazyk-programmirovaniya-python/">Python</a>		
+		</li>
+		
+		<li class="nav-item">
+			<a class="nav-link" title="Обзоры компьютерной техники" href="https://andreyex.ru/category/obzory/">Обзоры</a>		
+		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" title="Учебное пособие по Python 3" href="https://andreyex.ru/stati/">Статьи</a>		
+		</li>
+   
+      </ul>  
+       
+      </div><!-- header -->	   
+        
+      </div><!-- header-content -->
+        
+      </div><!-- header -->
+	  
+	<div id="content" style="display: none;">
+		<div class="container">	
+			<div class="display-posts-listing col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	
+<div style="clear: both;"></div>	  
+      
+
+	
+		<div class="listing-item" style="border-radius: 20px; border-style: solid; border-color: red; border-width: 2px;">
+			<a class="image" href="" title="" alt="">
+							</a> 	
+			<h3 class="title size-word"><a class="title" href=""></a></h3> 
+			<span class="excerpt-dash">-</span> 
+			<div class="excerpt top"></div>
+
+				<div class="clear"> </div>
+		</div>		
+				
+
+	    					  
+	  	    </div><!-- col -->
+        
+		</div><!-- container -->
+	</div><!-- content -->
+
+
+	<div id="content" style="display: none;">
+		<div class="container ads">	
+			<div class="display-posts-listing col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	
+				<div style="clear: both;"></div>	  
+      
+				<!--					<script type="text/javascript" async src="https://andreyex.ru/files/andreyex.js?x13673"></script>  -->
+					  	    </div><!-- col -->
+        
+		</div><!-- container -->
+		
+	</div><!-- content -->
+
+	<div style="padding: 40px 0; display: block;" class="container">	
+				
+		<h4 style="display: block;">Поиск по сайту:</h4>
+		<div class="row">
+			<form style="width: 100%; text-align: center;" role="search" method="get" id="searchform" action="https://andreyex.ru/">
+				<input type="text" value="" name="s" id="s">
+				<input type="hidden" value="post,page" name="post_type">
+				<input type="submit" id="searchsubmit" value="найти">
+			</form>
+		</div>
+	</div>	
+	
+<!-- <div id="container"> -->
+    
+	<div id="content">
+    
+        <div class="container">
+     
+ <div class="row">
+
+	<div class="col-xs-9 col-md-9">
+	
+								<div class="my-quote" title="Афоризмы кристаллизуют несоответствия. (Алан.Дж.Перлис)
+">Афоризмы кристаллизуют несоответствия. (Алан.Дж.Перлис)
+</div>
+
+					<h1 class="page-title">Как настроить Git-сервер на Linux</h1>
+					<div><span class="wtr-time-wrap after-title"><span class="wtr-time-number">3</span> мин для чтения</span></div>
+					
+					<div style="text-align: -webkit-right;">
+					<span class="wpfp-span"><img src="https://andreyex.ru/wp-content/plugins/wp-favorite-posts/img/heart.png?x13673" data-src="https://andreyex.ru/wp-content/plugins/wp-favorite-posts/img/heart.png?x13673" alt="Favorite" title="Favorite" class="wpfp-img lazy loaded" data-was-processed="true"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/plugins/wp-favorite-posts/img/loading.gif?x13673" alt="Loading" title="Loading" class="wpfp-hide wpfp-img lazy"><a class="wpfp-link" href="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/?wpfpaction=add&amp;postid=62513" title="Добавить в избранное" rel="nofollow">Добавить в избранное</a></span>					</div>
+  
+            <!--Start Page navi-->
+		<div class="page_navi" style="clear: left; margin-top: 10px;">
+			<p id="breadcrumbs"><span><span><a href="https://andreyex.ru/">Главное меню</a> » <span><a href="https://andreyex.ru/operacionnaya-sistema-linux/">Операционная система Linux</a> » <span class="breadcrumb_last" aria-current="page">Как настроить Git-сервер на Linux</span></span></span></span></p>		</div>
+		<!--End Page navi-->    
+		
+		<div style="font-size: 14px; margin-bottom: 0px; float: left;"><div id="post-ratings-62513" class="post-ratings" itemscope="" itemtype="http://schema.org/Article" data-nonce="a08e51daa2"><img class="lazy loaded" id="rating_62513_1" src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" data-src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" alt="1 Звезда" title="1 Звезда" onmouseover="current_rating(62513, 1, '1 Звезда');" onmouseout="ratings_off(5, 0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="cursor: pointer; border: 0px;" data-was-processed="true"><img class="lazy loaded" id="rating_62513_2" src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" data-src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" alt="2 Звезды" title="2 Звезды" onmouseover="current_rating(62513, 2, '2 Звезды');" onmouseout="ratings_off(5, 0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="cursor: pointer; border: 0px;" data-was-processed="true"><img class="lazy loaded" id="rating_62513_3" src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" data-src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" alt="3 Звезды" title="3 Звезды" onmouseover="current_rating(62513, 3, '3 Звезды');" onmouseout="ratings_off(5, 0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="cursor: pointer; border: 0px;" data-was-processed="true"><img class="lazy loaded" id="rating_62513_4" src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" data-src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" alt="4 Звезды" title="4 Звезды" onmouseover="current_rating(62513, 4, '4 Звезды');" onmouseout="ratings_off(5, 0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="cursor: pointer; border: 0px;" data-was-processed="true"><img class="lazy loaded" id="rating_62513_5" src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" data-src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_on.gif?x13673" alt="5 Звезд" title="5 Звезд" onmouseover="current_rating(62513, 5, '5 Звезд');" onmouseout="ratings_off(5, 0, 0);" onclick="rate_post();" onkeypress="rate_post();" style="cursor: pointer; border: 0px;" data-was-processed="true"> (<strong>1</strong> оценок, среднее: <strong>5,00</strong> из 5)<br><span class="post-ratings-text" id="ratings_62513_text"></span><meta itemprop="name" content="Как настроить Git-сервер на Linux"><meta itemprop="headline" content="Как настроить Git-сервер на Linux"><meta itemprop="description" content="Когда дело доходит до хостинга Git, у вас есть несколько доступных вариантов.&nbsp;GitHub, Gitlab и Bitbucket являются популярными решениями, но стоит рассмотреть возможность использования собственного Git..."><meta itemprop="datePublished" content="2019-10-02T15:31:20+03:00"><meta itemprop="dateModified" content="2019-10-02T15:31:20+03:00"><meta itemprop="url" content="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/"><meta itemprop="author" content="admin"><meta itemprop="mainEntityOfPage" content="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/"><div style="display: none;" itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="https://andreyex.ru/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-150x150.jpg"><meta itemprop="width" content="150"><meta itemprop="height" content="150"></div><div style="display: none;" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"><meta itemprop="name" content="ИТ Блог. Администрирование серверов на основе Linux (Ubuntu, Debian, CentOS, openSUSE)"><meta itemprop="url" content="https://andreyex.ru"><div itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"><meta itemprop="url" content=""></div></div><div style="display: none;" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating"><meta itemprop="bestRating" content="5"><meta itemprop="worstRating" content="1"><meta itemprop="ratingValue" content="5"><meta itemprop="ratingCount" content="1"></div></div><div id="post-ratings-62513-loading" class="post-ratings-loading"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/loading.gif?x13673" width="16" height="16" class="post-ratings-image lazy"> Загрузка...</div></div>		
+    
+    <div style="text-align: right;"> 2 октября 2019</div>    
+		<div style="height:10px; clear: both;"></div>
+    
+    
+		<div class="content-ver-sep"> </div>
+			
+        <div style="height:15px"></div>
+		
+	<div class="entrytext">
+	
+		<div class="startimage">
+			<img width="300" height="125" src="https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-300x125.jpg.webp?x13673" data-src="https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-300x125.jpg.webp?x13673" class="attachment-medium size-medium wp-post-image lazy loaded" alt="Как создать и перечислить локальные и удаленные ветки Git" loading="lazy" data-srcset="https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-300x125.jpg.webp 300w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-768x320.jpg.webp 768w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-1024x426.jpg.webp 1024w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-480x200.jpg.webp 480w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git.jpg.webp 1600w" data-sizes="(max-width: 300px) 100vw, 300px" sizes="(max-width: 300px) 100vw, 300px" srcset="https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-300x125.jpg.webp 300w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-768x320.jpg.webp 768w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-1024x426.jpg.webp 1024w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git-480x200.jpg.webp 480w, https://andreyex.ru/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2019/07/Kak-sozdat-i-perechislit-lokalnye-i-udalennye-vetki-Git.jpg.webp 1600w" data-was-processed="true">		</div>
+
+		<div id="wtr-content" data-bg="#FFFFFF" data-fg="#f44813" data-width="5" data-mute="1" data-fgopacity="0.5" data-mutedopacity="0.5" data-placement="right" data-placement-offset="0" data-content-offset="0" data-placement-touch="right" data-placement-offset-touch="0" data-transparent="" data-shadow="1" data-touch="1" data-non-touch="1" data-comments="0" data-commentsbg="#ffcece" data-location="page" data-mutedfg="#f44813" data-endfg="#f44813" data-rtl=""><span class="wpsdc-drop-cap">К</span>огда дело доходит до хостинга Git, у вас есть несколько доступных вариантов.&nbsp;GitHub, Gitlab и Bitbucket являются популярными решениями, но стоит рассмотреть возможность использования собственного Git-сервера.<p></p>
+<p>Настройка Git Server позволяет вам создавать частные репозитории без ограничений бесплатных планов провайдеров.</p>
+<p>В этой статье мы объясним, как настроить пустой сервер Git в Linux. Эта настройка хороша, если у вас мало репозиториев, а соавторы технически подкованы. В противном случае вам следует рассмотреть возможность установки самостоятельно размещенного git-приложения, такого как Gitea, Gogs или Gitlab.</p>
+<p>Сервер Git может быть установлен на любой удаленной машине с Linux или даже в вашей локальной системе.</p>
+<p>&nbsp;</p>
+<h2 id="setting-up-the-git-server" aria-hidden="true">Настройка Git-сервера</h2>
+<p>Первым шагом является установка Git на ваш сервер.</p>
+<p>Если вы используете Debian или Ubuntu, обновите индекс локального пакета и&nbsp;установите git&nbsp;, выполнив следующие команды от имени пользователя sudo:</p>
+<pre>sudo apt update &amp;&amp; sudo apt install git</pre>
+<p>&nbsp;</p>
+<p>Чтобы установить&nbsp;пакет git на&nbsp;серверах&nbsp;CentOS,&nbsp;введите:</p>
+<pre>sudo yum install git</pre>
+<p>&nbsp;</p>
+<p>Затем&nbsp;создайте нового пользователя,&nbsp;который будет управлять репозиториями Git:</p>
+<pre>sudo useradd -r -m -U -d /home/git -s /bin/bash git</pre>
+<p>&nbsp;</p>
+<p>Домашний каталог пользователя установлен в&nbsp;/home/git.&nbsp;Все репозитории будут храниться в этом каталоге.&nbsp;Мы не установили пароль для пользователя «git», вход в систему будет возможен только с использованием ключей ssh.</p>
+<p>Переключитесь на пользователя «git» с помощью команды su:</p>
+<pre>sudo su - git</pre>
+<p>&nbsp;</p>
+<p>Выполните следующие команды, чтобы&nbsp;создать каталог SSH&nbsp;и установить правильные&nbsp;разрешения&nbsp;:</p>
+<pre>mkdir -p ~/.ssh &amp;&amp; chmod 0700 ~/.ssh</pre>
+<p>&nbsp;</p>
+<p>Создайте файл с именем ~/.ssh/authorized_keys, который будет содержать ключи SSH авторизованных пользователей:</p>
+<pre>touch ~/.ssh/authorized_keys &amp;&amp; chmod 0600 ~/.ssh/authorized_keys</pre>
+<p>&nbsp;</p>
+<p>Вот и все.&nbsp;Настройка сервера завершена.&nbsp;Теперь вы готовы создать свой первый Git-репозиторий.</p>
+<p>Запустите следующую команду, чтобы запустить новый пустой репозиторий:</p>
+<pre>git init --bare ~/projectname.git</pre>
+<p>&nbsp;</p>
+<p>Вы можете назвать каталог, как хотите.&nbsp;Важно создать репозиторий в домашнем каталоге пользователя «git».</p>
+<pre>Initialized empty Git repository in /home/git/projectname.git/</pre>
+<p>&nbsp;</p>
+<h2 id="configuring-local-git-repository" aria-hidden="true">Настройка локального Git-репозитория</h2>
+<p>Чтобы иметь возможность отправлять локальные изменения git на сервер Git, вы должны добавить свой открытый SSH-ключ локального пользователя в файл authorized_keys удаленного пользователя «git» .</p>
+<p>Если у вас уже есть пара ключей SSH, созданная в вашей локальной системе, вы можете отобразить открытый ключ, набрав:</p>
+<pre>cat ~/.ssh/id_rsa.pub</pre>
+<p>&nbsp;</p>
+<p>Вывод должен выглядеть примерно так:</p>
+<pre>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDd/mnMzHwjUzK8g3ldfsfRpJuC16mhWamaXRk8ySQrD/dzpbRLfDnZsLxCzRoq+ZzFHGwcQlJergtergdHGRrO8FE5jl3IWRRp+mP12qYw== danny@linuxize.com</pre>
+<p>&nbsp;</p>
+<p>Если вы получаете сообщение об ошибке: No such file or directory, означающее, что у вас нет пары ключей SSH, созданной на вашем локальном компьютере.</p>
+<p>Для&nbsp;создания новой пары ключей SSH&nbsp;используйте следующую команду:</p>
+<div id="linuxize_com-link-h-large-1">
+<pre>ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"</pre>
+<p>&nbsp;</p>
+<p>Скопируйте вывод&nbsp;catкоманды выше и вернитесь в консоль Git-сервера.</p>
+<p>На сервере откройте текстовый редактор и вставьте в файл ~/.ssh/authorized_keys открытый ключ, скопированный с локального компьютера:</p>
+<pre>sudo nano /home/git/.ssh/authorized_keys</pre>
+<p>&nbsp;</p>
+<p>Весь текст открытого ключа должен быть в одной строке.</p>
+<p>Мы предполагаем, что пакет Git уже установлен на вашем локальном компьютере.&nbsp;Если нет, установите его так же, как описано в предыдущих разделах.</p>
+<p>Если у вас есть неверсированный проект, перейдите в каталог проекта.&nbsp;Если вы начинаете с нуля, создайте каталог проекта и перейдите к нему:</p>
+<pre>cd /path/to/local/project</pre>
+<p>&nbsp;</p>
+<p>Инициализировать репозиторий git:</p>
+<pre>git init .</pre>
+<p>&nbsp;</p>
+<p>Последний шаг –&nbsp;добавить git remote&nbsp;в ваш локальный репозиторий:</p>
+<pre>git remote add origin git@git_server_ip:projectname.git</pre>
+<p>&nbsp;</p>
+<p>Не забудьте заменить git_server_ip на ваше имя хоста Git-сервера или IP-адрес.</p>
+<p>Чтобы убедиться, что все настроено правильно,&nbsp;создайте тестовый файл&nbsp;:</p>
+<pre>touch test_file</pre>
+<p>&nbsp;</p>
+<p>Добавьте изменения в область подготовки:</p>
+<pre>git add .</pre>
+<p>&nbsp;</p>
+<p>Зафиксируйте изменения:</p>
+<pre>git commit -m "descriptive message"</pre>
+<p>&nbsp;</p>
+<p>Перенесите изменения локального репозитория в удаленный репозиторий:</p>
+<pre>git push -u origin master</pre>
+<p>&nbsp;</p>
+<p>Если все настроено правильно, вывод должен выглядеть примерно так:</p>
+<pre>Counting objects: 3, done.
+Writing objects: 100% (3/3), 218 bytes | 218.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To git_server_ip:projectname.git
+ * [new branch]      master -&gt; master
+Branch 'master' set up to track remote branch 'master' from 'origin'.</pre>
+<p>&nbsp;</p>
+<p>Чтобы добавить нового соавтора, просто скопируйте его открытый SSH-ключ в файл ~/.ssh/authorized_keys пользователя «git» .</p>
+<p>Вы можете использовать те же шаги для создания новых репозиториев.&nbsp;Важно отметить, что удаленный репозиторий должен существовать до того, как вы добавите git remote в свой локальный репозиторий.</p>
+<p>&nbsp;</p>
+<h2 id="conclusion" aria-hidden="true">Заключение</h2>
+<p>В этой статье мы показали, как настроить свой собственный Git-сервер и создать репозитории.</p>
+<p>Если вы столкнулись с проблемой или у вас есть отзыв, оставьте комментарий ниже.</p>
+</div>
+<div class="mistape_caption"><span class="mistape-link-wrap"><a href="https://mistape.com/" target="_blank" rel="nofollow" class="mistape-link mistape-logo"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="128px" height="128px" viewBox="-5 -54 128 128" enable-background="new -5 -54 128 128" xml:space="preserve"><g><path d="M26.5-28.7h12.1c-0.5,4.4-2.9,16-13.4,33L24.1,6l1.4,1.4C45,27,54.9,46.2,56.4,49.4v0.2h0.1c0.1,0.2,0.1,0.3,0.1,0.3 l2.5,5.5l2.2-5.6c0,0,0-0.1,0.1-0.1h0.1v-0.3c1.2-2.9,9.3-20.2,30.9-41.8L94,6l-1.2-1.8C82.6-10.5,79.5-23.3,78.7-28.7h12.9 c2.5,0,4.6-2,4.6-4.6V-54H21.9v20.8C21.9-30.7,23.9-28.7,26.5-28.7z M59,6.2c-3.9,0-7.1-3.2-7.1-7.1C51.9-4.8,55.1-8,59-8 c3.9,0,7.1,3.2,7.1,7.1C66.1,3,62.9,6.2,59,6.2z M87.4,5.4C74.1,18.8,66.1,30.5,61.6,38.2V11.1c5.5-1.2,9.7-6.1,9.7-12 c0-6.7-5.5-12.2-12.2-12.2c-6.7,0-12.2,5.5-12.2,12.2c0,5.9,4.2,10.8,9.7,12v27.6c-4.8-8-13.2-20.5-25.9-33.4 c10.6-17.5,12.7-29.4,13.2-33.9h29.7C74.2-23.4,77-10.3,87.4,5.4z M27-48.9h64v15.1H27V-48.9z"></path><path d="M95.8,47.3v10.6H22.2V47.6H-5v26.3h27.2h0V63h73.6v10.6H123V47.3H95.8z M0.1,68.8V52.7h17v7.7c0,0,0,0,0,0s0,0,0,0v8.3H0.1 z M117.9,68.5h-17V52.4h17V68.5z"></path></g></svg></a></span><p></p>
+<p>Если вы нашли ошибку, пожалуйста, выделите фрагмент текста и нажмите <em>Ctrl+Enter</em>.</p>
+</div>
+</div>    
+    <div class="up-bottom-border">
+	
+		<h5 style="text-align: -webkit-center;">Если статья понравилась, то поделитесь ей в социальных сетях:</h5>
+		<script src="https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+		<script src="https://yastatic.net/share2/share.js"></script>
+		<div style="margin: 20px; text-align: -webkit-center;" class="ya-share2 ya-share2_inited" data-services="collections,vkontakte,facebook,odnoklassniki,moimir,gplus,twitter"><div class="ya-share2__container ya-share2__container_size_m ya-share2__container_color-scheme_normal ya-share2__container_shape_normal"><ul class="ya-share2__list ya-share2__list_direction_horizontal"><li class="ya-share2__item ya-share2__item_service_vkontakte"><a class="ya-share2__link" href="https://vk.com/share.php?url=https%3A%2F%2Fandreyex.ru%2Foperacionnaya-sistema-linux%2Fkak-nastroit-git-server-na-linux%2F&amp;title=%D0%9A%D0%B0%D0%BA%20%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D1%82%D1%8C%20Git-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Linux&amp;utm_source=share2" rel="nofollow noopener" target="_blank" title="ВКонтакте"><span class="ya-share2__badge"><span class="ya-share2__icon"></span></span><span class="ya-share2__title">ВКонтакте</span></a></li><li class="ya-share2__item ya-share2__item_service_facebook"><a class="ya-share2__link" href="https://www.facebook.com/sharer.php?src=sp&amp;u=https%3A%2F%2Fandreyex.ru%2Foperacionnaya-sistema-linux%2Fkak-nastroit-git-server-na-linux%2F&amp;title=%D0%9A%D0%B0%D0%BA%20%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D1%82%D1%8C%20Git-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Linux&amp;utm_source=share2" rel="nofollow noopener" target="_blank" title="Facebook"><span class="ya-share2__badge"><span class="ya-share2__icon"></span></span><span class="ya-share2__title">Facebook</span></a></li><li class="ya-share2__item ya-share2__item_service_odnoklassniki"><a class="ya-share2__link" href="https://connect.ok.ru/offer?url=https%3A%2F%2Fandreyex.ru%2Foperacionnaya-sistema-linux%2Fkak-nastroit-git-server-na-linux%2F&amp;title=%D0%9A%D0%B0%D0%BA%20%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D1%82%D1%8C%20Git-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Linux&amp;utm_source=share2" rel="nofollow noopener" target="_blank" title="Одноклассники"><span class="ya-share2__badge"><span class="ya-share2__icon"></span></span><span class="ya-share2__title">Одноклассники</span></a></li><li class="ya-share2__item ya-share2__item_service_moimir"><a class="ya-share2__link" href="https://connect.mail.ru/share?url=https%3A%2F%2Fandreyex.ru%2Foperacionnaya-sistema-linux%2Fkak-nastroit-git-server-na-linux%2F&amp;title=%D0%9A%D0%B0%D0%BA%20%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D1%82%D1%8C%20Git-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Linux&amp;utm_source=share2" rel="nofollow noopener" target="_blank" title="Мой Мир"><span class="ya-share2__badge"><span class="ya-share2__icon"></span></span><span class="ya-share2__title">Мой Мир</span></a></li><li class="ya-share2__item ya-share2__item_service_twitter"><a class="ya-share2__link" href="https://twitter.com/intent/tweet?text=%D0%9A%D0%B0%D0%BA%20%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B8%D1%82%D1%8C%20Git-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Linux&amp;url=https%3A%2F%2Fandreyex.ru%2Foperacionnaya-sistema-linux%2Fkak-nastroit-git-server-na-linux%2F&amp;utm_source=share2" rel="nofollow noopener" target="_blank" title="Twitter"><span class="ya-share2__badge"><span class="ya-share2__icon"></span></span><span class="ya-share2__title">Twitter</span></a></li></ul></div></div>
+	
+				
+		<div class="post-meta"> 
+			<span class="col-xs-6 col-sm-6 col-md-5 col-lg-5 d-md-block post-tag"> <span class="post-tag-icon"></span><a href="https://andreyex.ru/tag/git/" rel="tag">Git</a>, <a href="https://andreyex.ru/tag/linux/" rel="tag">Linux</a> </span> 
+			<span class="col-xs-6 col-sm-6 col-md-3 col-lg-3 d-md-block post-category"> <span class="post-cat-icon"></span> <a href="https://andreyex.ru/category/linux/ustanovka-po-na-linux/" rel="category tag">Установка ПО на Linux</a> </span> 
+			<span class="col-xs-6 col-sm-6 col-md-4 col-lg-4 d-md-block post-comments"> <span class="post-comm-icon"></span> Кол-во комментариев: 0 </span>
+		</div> 
+		<span class="post-edit"> </span> 
+	
+		</div>
+
+	<!-- Yandex.RTB R-A-293703-8 -->
+<div id="yandex_rtb_R-A-293703-8"></div>
+<script type="text/javascript">
+    (function(w, d, n, s, t) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            Ya.Context.AdvManager.render({
+                blockId: "R-A-293703-8",
+                renderTo: "yandex_rtb_R-A-293703-8",
+                async: true
+            });
+        });
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.type = "text/javascript";
+        s.src = "https://an.yandex.ru/system/context.js";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(this, this.document, "yandexContextAsyncCallbacks");
+</script>    
+					
+
+			
+<div id="commentsbox">
+		<div id="comment-form">
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Добавить комментарий <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#respond" style="display:none;">Отменить ответ</a></small></h3><form action="https://andreyex.ru/wp-comments-post.php" method="post" id="commentform" class="comment-form"><p class="comment-notes"><span id="email-notes">Ваш адрес email не будет опубликован.</span> Обязательные поля помечены <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Комментарий</label> <div class="kws-wrapper"><div class="sm_list  qip" style="width:30px; height:30px; background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/smile.gif); background-position:center center; background-repeat:no-repeat;" onmouseover="var el = this.childNodes[0];if( el.style.display == 'block' )return;el.style.display='block';for( var i=0; i < el.childNodes.length; i++ ){var l = el.childNodes[i];var bg = l.getAttribute('bg');if( bg )l.setAttribute( 'style', bg );}" onmouseout="this.childNodes[0].style.display = 'none'"><div class="sm_container"><div class="smiles_button" onclick="ksmInsert(':-)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/smile.gif);" title=":-)"></div><div class="smiles_button" onclick="ksmInsert(':-(', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/sad.gif);" title=":-("></div><div class="smiles_button" onclick="ksmInsert(':-D', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/laugh.gif);" title=":-D"></div><div class="smiles_button" onclick="ksmInsert('(:rofl:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/rofl.gif);" title="(:rofl:)"></div><div class="smiles_button" onclick="ksmInsert('(:blum:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/blum.gif);" title="(:blum:)"></div><div class="smiles_button" onclick="ksmInsert('(:kiss:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/kiss.gif);" title="(:kiss:)"></div><div class="smiles_button" onclick="ksmInsert('(:yes:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/yes.gif);" title="(:yes:)"></div><div class="smiles_button" onclick="ksmInsert('(:no:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/no.gif);" title="(:no:)"></div><div class="smiles_button" onclick="ksmInsert('(:good:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/good.gif);" title="(:good:)"></div><div class="smiles_button" onclick="ksmInsert('(:bad:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bad.gif);" title="(:bad:)"></div><div class="smiles_button" onclick="ksmInsert('(:unknw:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/unknw.gif);" title="(:unknw:)"></div><div class="smiles_button" onclick="ksmInsert('(:sorry:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/sorry.gif);" title="(:sorry:)"></div><div class="smiles_button" onclick="ksmInsert('(:pardon:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/pardon.gif);" title="(:pardon:)"></div><div class="smiles_button" onclick="ksmInsert('(:wacko:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/wacko.gif);" title="(:wacko:)"></div><div class="smiles_button" onclick="ksmInsert('(:acute:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/acute.gif);" title="(:acute:)"></div><div class="smiles_button" onclick="ksmInsert('(:boast:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/boast.gif);" title="(:boast:)"></div><div class="smiles_button" onclick="ksmInsert('(:boredom:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/boredom.gif);" title="(:boredom:)"></div><div class="smiles_button" onclick="ksmInsert('(:dash:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/dash.gif);" title="(:dash:)"></div><div class="smiles_button" onclick="ksmInsert('(:search:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/search.gif);" title="(:search:)"></div><div class="smiles_button" onclick="ksmInsert('(:crazy:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/crazy.gif);" title="(:crazy:)"></div><div class="smiles_button" onclick="ksmInsert('(:yess:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/yess.gif);" title="(:yess:)"></div><div class="smiles_button" onclick="ksmInsert('(:cool:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/cool.gif);" title="(:cool:)"></div><div class="smiles_button" onclick="ksmInsert('(:aggressive:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/aggressive.gif);" title="(:aggressive:)"></div><div class="smiles_button" onclick="ksmInsert('(:angel:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/angel.gif);" title="(:angel:)"></div><div class="smiles_button" onclick="ksmInsert('(:bb:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bb.gif);" title="(:bb:)"></div><div class="smiles_button" onclick="ksmInsert('(:beach:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/beach.gif);" title="(:beach:)"></div><div class="smiles_button" onclick="ksmInsert('(:beee:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/beee.gif);" title="(:beee:)"></div><div class="smiles_button" onclick="ksmInsert('(:big_boss:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/big_boss.gif);" title="(:big_boss:)"></div><div class="smiles_button" onclick="ksmInsert('(:blush:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/blush.gif);" title="(:blush:)"></div><div class="smiles_button" onclick="ksmInsert('(:bomb:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bomb.gif);" title="(:bomb:)"></div><div class="smiles_button" onclick="ksmInsert('(:bravo:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bravo.gif);" title="(:bravo:)"></div><div class="smiles_button" onclick="ksmInsert('(:buba:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/buba.gif);" title="(:buba:)"></div><div class="smiles_button" onclick="ksmInsert('(:bye:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bye.gif);" title="(:bye:)"></div><div class="smiles_button" onclick="ksmInsert('(:cry:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/cry.gif);" title="(:cry:)"></div><div class="smiles_button" onclick="ksmInsert('(:gamer4:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/gamer4.gif);" title="(:gamer4:)"></div><div class="smiles_button" onclick="ksmInsert('(:give_rose:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/give_rose.gif);" title="(:give_rose:)"></div><div class="smiles_button" onclick="ksmInsert('(:heart:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/heart.gif);" title="(:heart:)"></div><div class="smiles_button" onclick="ksmInsert('(:help:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/help.gif);" title="(:help:)"></div><div class="smiles_button" onclick="ksmInsert('(:hi:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/hi.gif);" title="(:hi:)"></div><div class="smiles_button" onclick="ksmInsert('(:laugh1:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/laugh1.gif);" title="(:laugh1:)"></div><div class="smiles_button" onclick="ksmInsert('(:mail:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/mail.gif);" title="(:mail:)"></div><div class="smiles_button" onclick="ksmInsert('(:mda:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/mda.gif);" title="(:mda:)"></div><div class="smiles_button" onclick="ksmInsert('(:mosking:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/mosking.gif);" title="(:mosking:)"></div><div class="smiles_button" onclick="ksmInsert('(:music:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/music.gif);" title="(:music:)"></div><div class="smiles_button" onclick="ksmInsert('(:negative:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/negative.gif);" title="(:negative:)"></div><div class="smiles_button" onclick="ksmInsert('(:curtsey:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/curtsey.gif);" title="(:curtsey:)"></div><div class="smiles_button" onclick="ksmInsert('(:popcorm:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/popcorm.gif);" title="(:popcorm:)"></div><div class="smiles_button" onclick="ksmInsert('(:punish:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/punish.gif);" title="(:punish:)"></div><div class="smiles_button" onclick="ksmInsert('(:rtfm:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/rtfm.gif);" title="(:rtfm:)"></div><div class="smiles_button" onclick="ksmInsert('(:sarcastic:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/sarcastic.gif);" title="(:sarcastic:)"></div><div class="smiles_button" onclick="ksmInsert('(:secret:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/secret.gif);" title="(:secret:)"></div><div class="smiles_button" onclick="ksmInsert('(:shock:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/shock.gif);" title="(:shock:)"></div><div class="smiles_button" onclick="ksmInsert('(:shout:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/shout.gif);" title="(:shout:)"></div><div class="smiles_button" onclick="ksmInsert('(:thank_you:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/thank_you.gif);" title="(:thank_you:)"></div><div class="smiles_button" onclick="ksmInsert('(:vava:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/vava.gif);" title="(:vava:)"></div><div class="smiles_button" onclick="ksmInsert('(:victory:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/victory.gif);" title="(:victory:)"></div><div class="smiles_button" onclick="ksmInsert('(:dance:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/dance.gif);" title="(:dance:)"></div><div class="smiles_button" onclick="ksmInsert('(:dash2:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/dash2.gif);" title="(:dash2:)"></div><div class="smiles_button" onclick="ksmInsert('(:declare:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/declare.gif);" title="(:declare:)"></div><div class="smiles_button" onclick="ksmInsert('(:diablo:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/diablo.gif);" title="(:diablo:)"></div><div class="smiles_button" onclick="ksmInsert('(:don-t_mention:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/don-t_mention.gif);" title="(:don-t_mention:)"></div><div class="smiles_button" onclick="ksmInsert('(:drinks:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/drinks.gif);" title="(:drinks:)"></div><div class="smiles_button" onclick="ksmInsert('(:focus:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/focus.gif);" title="(:focus:)"></div><div class="smiles_button" onclick="ksmInsert('(:fool:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/fool.gif);" title="(:fool:)"></div><div class="smiles_button" onclick="ksmInsert('(:friends:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/friends.gif);" title="(:friends:)"></div><div class="smiles_button" onclick="ksmInsert('(:gamer:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/gamer.gif);" title="(:gamer:)"></div><div class="smiles_button" onclick="ksmInsert('(:ok:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/ok.gif);" title="(:ok:)"></div><div class="smiles_button" onclick="ksmInsert('(:wink:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/wink.gif);" title="(:wink:)"></div><div class="smiles_button" onclick="ksmInsert('(:yu:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/yu.gif);" title="(:yu:)"></div><div class="smiles_button" onclick="ksmInsert('(:air_kiss:)', 'comment');" bg="background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/air_kiss.gif);" title="(:air_kiss:)"></div></div></div><textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea></div></p><p class="comment-form-author"><label for="author">Имя <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required="required"></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" maxlength="100" aria-describedby="email-notes" required="required"></p>
+<!-- Mailchimp for WordPress v4.8.3 - https://www.mc4wp.com/ --><input type="hidden" name="_mc4wp_subscribe_wp-comment-form" value="0"><p class=" mc4wp-checkbox mc4wp-checkbox-wp-comment-form"><label><input type="checkbox" name="_mc4wp_subscribe_wp-comment-form" value="1" checked="checked"><span>Хочу подписаться на новости!</span></label></p><!-- / Mailchimp for WordPress --><p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Отправить комментарий"> <input type="hidden" name="comment_post_ID" value="62513" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="6b20448769"></p><textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100" style="display: none !important;"></textarea><input type="hidden" id="ak_js" name="ak_js" value="1614180830323"></form>	</div><!-- #respond -->
+		</div>
+</div>
+            
+	
+								
+	</div>  <!--entrytext-->
+					
+		</div> <!--post-widgets-->   	
+                                  
+     	
+<div id="float-widget" class="float-widget col-xs-3 col-sm-3 col-md-3 col-lg-3">
+<aside id="wpfp-most_favorited_posts" class="widget wpfp_widget_view"><h3 class="widget-title">Избранные посты</h3><ul><li><a href="https://andreyex.ru/linux/komandy-linux-i-komandy-shell/kak-skopirovat-fajly-s-pomoshhyu-komandy-sr-v-linux/" title="Как скопировать файлы с помощью команды ср в Linux">Как скопировать файлы с помощью команды ср в Linux</a> (15097)</li><li><a href="https://andreyex.ru/operacionnaya-sistema-linux/" title="Операционная система Linux">Операционная система Linux</a> (1249)</li><li><a href="https://andreyex.ru/blog-platforma-wordpress/" title="Блог-платформа wordpress">Блог-платформа wordpress</a> (872)</li><li><a href="https://andreyex.ru/ubuntu/" title="Операционная система Ubuntu">Операционная система Ubuntu</a> (787)</li><li><a href="https://andreyex.ru/blog-platforma-wordpress/luchshie-uchebniki-po-wordpress/" title="Лучшие  учебники по WordPress">Лучшие  учебники по WordPress</a> (666)</li><li><a href="https://andreyex.ru/stati/" title="Статьи">Статьи</a> (589)</li><li><a href="https://andreyex.ru/centos-7/" title="Операционная система CentOS">Операционная система CentOS</a> (551)</li><li><a href="https://andreyex.ru/bazy-dannyx/" title="Базы данных">Базы данных</a> (469)</li><li><a href="https://andreyex.ru/operacionnaya-sistema-debian/" title="Операционная система Debian">Операционная система Debian</a> (377)</li><li><a href="https://andreyex.ru/informaciya/" title="Информация">Информация</a> (341)</li></ul></aside><aside id="mc4wp_form_widget-4" class="widget widget_mc4wp_form_widget"><h3 class="widget-title">Рассылка</h3><script>(function() {
+	window.mc4wp = window.mc4wp || {
+		listeners: [],
+		forms: {
+			on: function(evt, cb) {
+				window.mc4wp.listeners.push(
+					{
+						event   : evt,
+						callback: cb
+					}
+				);
+			}
+		}
+	}
+})();
+</script><!-- Mailchimp for WordPress v4.8.3 - https://wordpress.org/plugins/mailchimp-for-wp/ --><form id="mc4wp-form-1" class="mc4wp-form mc4wp-form-2130 mc4wp-form-theme mc4wp-form-theme-red" method="post" data-id="2130" data-name="Подписка на статьи"><div class="mc4wp-form-fields"><p>
+    <label>Подписка на статьи</label>
+</p>
+<p>Присоединяйтесь к нашей многочисленой армии подписчиков</p>
+<p>
+	<label>Адрес Email: </label>
+	<input type="email" name="EMAIL" placeholder="Ваш адрес email" required="">
+</p>
+
+<p>
+	<input type="submit" value="Подписаться">
+</p></div><label style="display: none !important;">Оставьте это поле пустым, если вы человек: <input type="text" name="_mc4wp_honeypot" value="" tabindex="-1" autocomplete="off"></label><input type="hidden" name="_mc4wp_timestamp" value="1614180829"><input type="hidden" name="_mc4wp_form_id" value="2130"><input type="hidden" name="_mc4wp_form_element_id" value="mc4wp-form-1"><div class="mc4wp-response"></div></form><!-- / Mailchimp for WordPress Plugin --></aside><aside id="custom_html-36" class="widget_text widget widget_custom_html"><div class="textwidget custom-html-widget"><!-- Yandex.RTB R-A-293703-2 -->
+<div id="yandex_rtb_R-A-293703-2"></div>
+<script type="text/javascript">
+    (function(w, d, n, s, t) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            Ya.Context.AdvManager.render({
+                blockId: "R-A-293703-2",
+                renderTo: "yandex_rtb_R-A-293703-2",
+                async: true
+            });
+        });
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.type = "text/javascript";
+        s.src = "https://an.yandex.ru/system/context.js";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(this, this.document, "yandexContextAsyncCallbacks");
+</script></div></aside><aside id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title">Последние комментарии</h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Андрей</span> к записи <a href="https://andreyex.ru/centos-7/bezopasnyj-apache-s-let-s-encrypt-na-centos-7/#comment-12227">Безопасный Apache с Let’s Encrypt на CentOS 7</a></li><li class="recentcomments"><span class="comment-author-link">Александр</span> к записи <a href="https://andreyex.ru/centos-7/chto-takoe-looking-glass-v-seti-i-kak-ustanovit-ego-na-svoj-vps-ili-server/#comment-12209">Что такое Looking Glass в сети и как установить его на свой VPS или сервер</a></li><li class="recentcomments"><span class="comment-author-link">ChiVS</span> к записи <a href="https://andreyex.ru/ubuntu/kak-uvelichit-razmer-swap-v-ubuntu/#comment-12195">Как увеличить размер swap в Ubuntu</a></li><li class="recentcomments"><span class="comment-author-link">tesla1466</span> к записи <a href="https://andreyex.ru/ubuntu/kak-ustanovit-xrdp-server-udalennyj-rabochij-stol-v-ubuntu-20-04/#comment-12189">Как установить Xrdp Server (удаленный рабочий стол) в Ubuntu 20.04</a></li><li class="recentcomments"><span class="comment-author-link">Дмитрий</span> к записи <a href="https://andreyex.ru/yazyk-programmirovaniya-python/uchebnik-po-python-3/python-3-strokovaya-funkciya-count/#comment-12171">Python 3 – Строковая функция count()</a></li></ul></aside><aside id="polls-widget-4" class="widget widget_polls-widget"><h3 class="widget-title">Опросы</h3><div id="polls-3" class="wp-polls">
+	<form id="polls_form_3" class="wp-polls-form" action="https://andreyex.ru/index.php" method="post">
+		<p style="display: none;"><input type="hidden" id="poll_3_nonce" name="wp-polls-nonce" value="07a159ed21"></p>
+		<p style="display: none;"><input type="hidden" name="poll_id" value="3"></p>
+		<p style="text-align: center"><strong>Какую OS на основе Linux вы используете?</strong></p><div id="polls-3-ans" class="wp-polls-ans"><ul class="wp-polls-ul">
+		<li><input type="radio" id="poll-answer-10" name="poll_3" value="10"> <label for="poll-answer-10">Ubuntu</label></li>
+		<li><input type="radio" id="poll-answer-11" name="poll_3" value="11"> <label for="poll-answer-11">CentOS</label></li>
+		<li><input type="radio" id="poll-answer-12" name="poll_3" value="12"> <label for="poll-answer-12">Debian</label></li>
+		<li><input type="radio" id="poll-answer-13" name="poll_3" value="13"> <label for="poll-answer-13">openSUSE</label></li>
+		<li><input type="radio" id="poll-answer-14" name="poll_3" value="14"> <label for="poll-answer-14">Fedora</label></li>
+		<li><input type="radio" id="poll-answer-15" name="poll_3" value="15"> <label for="poll-answer-15">Arch Linux</label></li>
+		<li><input type="radio" id="poll-answer-16" name="poll_3" value="16"> <label for="poll-answer-16">Другую</label></li>
+		</ul><p style="text-align: center"><input type="button" name="vote" value="   Ответ   " class="Buttons" onclick="poll_vote(3);"></p><p style="text-align: center"><a href="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#ViewPollResults" onclick="poll_result(3); return false;" title="Посмотреть результаты опроса">Посмотреть результаты</a></p></div>
+	</form>
+</div>
+<div id="polls-3-loading" class="wp-polls-loading"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/plugins/wp-polls/images/loading.gif?x13673" width="16" height="16" alt="Загрузка ..." title="Загрузка ..." class="wp-polls-image lazy">&nbsp;Загрузка ...</div>
+<ul><li><a href="https://andreyex.ru/pollsarchive">Архив опросов</a></li></ul></aside><aside id="tag_cloud-7" class="widget widget_tag_cloud"><h3 class="widget-title">Облако меток</h3><div class="tagcloud"><a href="https://andreyex.ru/tag/bash/" class="tag-cloud-link tag-link-541 tag-link-position-1" style="font-size: 11.586776859504pt;" aria-label="Bash (96 элементов)">Bash</a>
+<a href="https://andreyex.ru/tag/bootstrap/" class="tag-cloud-link tag-link-531 tag-link-position-2" style="font-size: 14.132231404959pt;" aria-label="Bootstrap (160 элементов)">Bootstrap</a>
+<a href="https://andreyex.ru/tag/centos/" class="tag-cloud-link tag-link-292 tag-link-position-3" style="font-size: 15.404958677686pt;" aria-label="CentOS (208 элементов)">CentOS</a>
+<a href="https://andreyex.ru/tag/centos-7/" class="tag-cloud-link tag-link-281 tag-link-position-4" style="font-size: 10.892561983471pt;" aria-label="CentOS 7 (85 элементов)">CentOS 7</a>
+<a href="https://andreyex.ru/tag/debian/" class="tag-cloud-link tag-link-408 tag-link-position-5" style="font-size: 12.859504132231pt;" aria-label="Debian (124 элемента)">Debian</a>
+<a href="https://andreyex.ru/tag/google/" class="tag-cloud-link tag-link-79 tag-link-position-6" style="font-size: 8.6942148760331pt;" aria-label="Google (54 элемента)">Google</a>
+<a href="https://andreyex.ru/tag/javascript/" class="tag-cloud-link tag-link-61 tag-link-position-7" style="font-size: 16.099173553719pt;" aria-label="JavaScript (241 элемент)">JavaScript</a>
+<a href="https://andreyex.ru/tag/linux/" class="tag-cloud-link tag-link-282 tag-link-position-8" style="font-size: 22pt;" aria-label="Linux (782 элемента)">Linux</a>
+<a href="https://andreyex.ru/tag/mysql/" class="tag-cloud-link tag-link-184 tag-link-position-9" style="font-size: 15.289256198347pt;" aria-label="MySQL (202 элемента)">MySQL</a>
+<a href="https://andreyex.ru/tag/nginx/" class="tag-cloud-link tag-link-396 tag-link-position-10" style="font-size: 8.9256198347107pt;" aria-label="Nginx (56 элементов)">Nginx</a>
+<a href="https://andreyex.ru/tag/php/" class="tag-cloud-link tag-link-179 tag-link-position-11" style="font-size: 9.7355371900826pt;" aria-label="php (67 элементов)">php</a>
+<a href="https://andreyex.ru/tag/python/" class="tag-cloud-link tag-link-653 tag-link-position-12" style="font-size: 12.743801652893pt;" aria-label="python (123 элемента)">python</a>
+<a href="https://andreyex.ru/tag/python-3/" class="tag-cloud-link tag-link-882 tag-link-position-13" style="font-size: 14.132231404959pt;" aria-label="Python 3 (161 элемент)">Python 3</a>
+<a href="https://andreyex.ru/tag/seo/" class="tag-cloud-link tag-link-43 tag-link-position-14" style="font-size: 13.785123966942pt;" aria-label="SEO (150 элементов)">SEO</a>
+<a href="https://andreyex.ru/tag/sql/" class="tag-cloud-link tag-link-581 tag-link-position-15" style="font-size: 11.471074380165pt;" aria-label="SQL (94 элемента)">SQL</a>
+<a href="https://andreyex.ru/tag/ubuntu/" class="tag-cloud-link tag-link-315 tag-link-position-16" style="font-size: 18.644628099174pt;" aria-label="Ubuntu (395 элементов)">Ubuntu</a>
+<a href="https://andreyex.ru/tag/ubuntu-20-04/" class="tag-cloud-link tag-link-1523 tag-link-position-17" style="font-size: 8.8099173553719pt;" aria-label="Ubuntu 20.04 (55 элементов)">Ubuntu 20.04</a>
+<a href="https://andreyex.ru/tag/wordpress/" class="tag-cloud-link tag-link-37 tag-link-position-18" style="font-size: 21.768595041322pt;" aria-label="Wordpress (747 элементов)">Wordpress</a>
+<a href="https://andreyex.ru/tag/komandy-linux/" class="tag-cloud-link tag-link-308 tag-link-position-19" style="font-size: 15.867768595041pt;" aria-label="Команды linux (229 элементов)">Команды linux</a>
+<a href="https://andreyex.ru/tag/posobie-po-sql/" class="tag-cloud-link tag-link-582 tag-link-position-20" style="font-size: 10.661157024793pt;" aria-label="Пособие по SQL (81 элемент)">Пособие по SQL</a>
+<a href="https://andreyex.ru/tag/primery-bootstrap/" class="tag-cloud-link tag-link-835 tag-link-position-21" style="font-size: 12.743801652893pt;" aria-label="Примеры Bootstrap (121 элемент)">Примеры Bootstrap</a>
+<a href="https://andreyex.ru/tag/rukovodstvo-dlya-nachinayushhix/" class="tag-cloud-link tag-link-57 tag-link-position-22" style="font-size: 9.8512396694215pt;" aria-label="Руководство для начинающих (68 элементов)">Руководство для начинающих</a>
+<a href="https://andreyex.ru/tag/socialnye-seti/" class="tag-cloud-link tag-link-44 tag-link-position-23" style="font-size: 10.082644628099pt;" aria-label="Социальные сети (71 элемент)">Социальные сети</a>
+<a href="https://andreyex.ru/tag/ustanovka-po-na-ubuntu/" class="tag-cloud-link tag-link-352 tag-link-position-24" style="font-size: 8.6942148760331pt;" aria-label="Установка ПО на Ubuntu (54 элемента)">Установка ПО на Ubuntu</a>
+<a href="https://andreyex.ru/tag/uchebnik-po-python-3/" class="tag-cloud-link tag-link-883 tag-link-position-25" style="font-size: 13.206611570248pt;" aria-label="Учебник по Python 3 (135 элементов)">Учебник по Python 3</a>
+<a href="https://andreyex.ru/tag/xosting/" class="tag-cloud-link tag-link-27 tag-link-position-26" style="font-size: 9.0413223140496pt;" aria-label="Хостинг (58 элементов)">Хостинг</a>
+<a href="https://andreyex.ru/tag/baza-dannyx/" class="tag-cloud-link tag-link-94 tag-link-position-27" style="font-size: 15.289256198347pt;" aria-label="база данных (204 элемента)">база данных</a>
+<a href="https://andreyex.ru/tag/bezopasnost/" class="tag-cloud-link tag-link-154 tag-link-position-28" style="font-size: 10.776859504132pt;" aria-label="безопасность (83 элемента)">безопасность</a>
+<a href="https://andreyex.ru/tag/bezopasnost-linux/" class="tag-cloud-link tag-link-380 tag-link-position-29" style="font-size: 10.082644628099pt;" aria-label="безопасность Linux (72 элемента)">безопасность Linux</a>
+<a href="https://andreyex.ru/tag/glossarij-v-wordpress/" class="tag-cloud-link tag-link-66 tag-link-position-30" style="font-size: 10.892561983471pt;" aria-label="глоссарий в Wordpress (85 элементов)">глоссарий в Wordpress</a>
+<a href="https://andreyex.ru/tag/internet-magazin/" class="tag-cloud-link tag-link-436 tag-link-position-31" style="font-size: 9.9669421487603pt;" aria-label="интернет-магазин (70 элементов)">интернет-магазин</a>
+<a href="https://andreyex.ru/tag/komandnaya-stroka/" class="tag-cloud-link tag-link-530 tag-link-position-32" style="font-size: 8pt;" aria-label="командная строка (47 элементов)">командная строка</a>
+<a href="https://andreyex.ru/tag/kompyuter/" class="tag-cloud-link tag-link-1413 tag-link-position-33" style="font-size: 9.0413223140496pt;" aria-label="компьютер (58 элементов)">компьютер</a>
+<a href="https://andreyex.ru/tag/marketing/" class="tag-cloud-link tag-link-227 tag-link-position-34" style="font-size: 10.892561983471pt;" aria-label="маркетинг (84 элемента)">маркетинг</a>
+<a href="https://andreyex.ru/tag/nastrojka-linux/" class="tag-cloud-link tag-link-306 tag-link-position-35" style="font-size: 9.2727272727273pt;" aria-label="настройка Linux (61 элемент)">настройка Linux</a>
+<a href="https://andreyex.ru/tag/nastrojka-ubuntu/" class="tag-cloud-link tag-link-316 tag-link-position-36" style="font-size: 8.1157024793388pt;" aria-label="настройка Ubuntu (48 элементов)">настройка Ubuntu</a>
+<a href="https://andreyex.ru/tag/plaginy-wordpress/" class="tag-cloud-link tag-link-53 tag-link-position-37" style="font-size: 11.239669421488pt;" aria-label="плагины Wordpress (91 элемент)">плагины Wordpress</a>
+<a href="https://andreyex.ru/tag/programmirovanie/" class="tag-cloud-link tag-link-20 tag-link-position-38" style="font-size: 10.082644628099pt;" aria-label="программирование (71 элемент)">программирование</a>
+<a href="https://andreyex.ru/tag/prodvizhenie-sajtov/" class="tag-cloud-link tag-link-264 tag-link-position-39" style="font-size: 12.280991735537pt;" aria-label="продвижение сайтов (111 элементов)">продвижение сайтов</a>
+<a href="https://andreyex.ru/tag/reklama/" class="tag-cloud-link tag-link-110 tag-link-position-40" style="font-size: 12.396694214876pt;" aria-label="реклама (114 элементов)">реклама</a>
+<a href="https://andreyex.ru/tag/server/" class="tag-cloud-link tag-link-792 tag-link-position-41" style="font-size: 8.4628099173554pt;" aria-label="сервер (52 элемента)">сервер</a>
+<a href="https://andreyex.ru/tag/sozdanie-sajtov/" class="tag-cloud-link tag-link-244 tag-link-position-42" style="font-size: 14.01652892562pt;" aria-label="создание сайтов (158 элементов)">создание сайтов</a>
+<a href="https://andreyex.ru/tag/stati/" class="tag-cloud-link tag-link-200 tag-link-position-43" style="font-size: 14.942148760331pt;" aria-label="статьи (188 элементов)">статьи</a>
+<a href="https://andreyex.ru/tag/terminal/" class="tag-cloud-link tag-link-847 tag-link-position-44" style="font-size: 8.9256198347107pt;" aria-label="терминал (56 элементов)">терминал</a>
+<a href="https://andreyex.ru/tag/uchebniki-po-wordpress/" class="tag-cloud-link tag-link-67 tag-link-position-45" style="font-size: 13.553719008264pt;" aria-label="учебники по Wordpress (142 элемента)">учебники по Wordpress</a></div>
+</aside></div>
+        
+      </div> <!--row--> 
+      
+      </div><!-- container --> 
+    
+	</div> <!-- content -->
+
+<!-- </div><!-- container -->  
+
+<!-- Yandex.RTB R-A-293703-6 -->
+<div id="yandex_rtb_R-A-293703-6"></div>
+<script type="text/javascript">
+    (function(w, d, n, s, t) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            Ya.Context.AdvManager.render({
+                blockId: "R-A-293703-6",
+                renderTo: "yandex_rtb_R-A-293703-6",
+                async: true
+            });
+        });
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.type = "text/javascript";
+        s.src = "https://an.yandex.ru/system/context.js";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(this, this.document, "yandexContextAsyncCallbacks");
+</script>
+
+<div id="footer">
+		<div class="container">
+		<div class="row">
+			<div class="col-md-3 col-sm-6 col-sx-12">
+				<aside id="nav_menu-3" class="widget widget_nav_menu clearfix">
+					<div class="row-title">ОПЕРАЦИОННЫЕ СИСТЕМЫ</div>
+					<div class="menu-footer-menu-1-container">
+						<ul id="menu-footer-menu-1" class="menu">
+							<li id="menu-item-249"><a href="https://andreyex.ru/operacionnaya-sistema-linux/" rel="nofollow">Linux</a></li>
+							<li id="menu-item-250"><a href="https://andreyex.ru/operacionnaya-sistema-debian/">Debian</a></li>
+							<li id="menu-item-251"><a href="https://andreyex.ru/centos-7/">Centos</a></li>
+							<li id="menu-item-252"><a href="https://andreyex.ru/ubuntu/">Ubuntu</a></li>
+							<li id="menu-item-253"><a href="https://andreyex.ru/operacionnaya-sistema-opensuse/">OpenSUSE</a></li>							
+						</ul>
+					</div>
+				</aside>
+
+				<aside id="nav_menu-6" class="widget widget_nav_menu clearfix">
+					<div class="row-title">WORDPRESS</div>
+					<div class="menu-footer-menu-2-container">
+						<ul id="menu-footer-menu-2" class="menu">
+							<li id="menu-item-1538"><a href="https://andreyex.ru/blog-platforma-wordpress/">Wordpress</a></li>
+							<li id="menu-item-1539"><a href="https://andreyex.ru/blog-platforma-wordpress/uchebnik-po-wordpress/">Учебное пособие по Wordpress</a></li>
+							<li id="menu-item-1540"><a href="https://andreyex.ru/blog-platforma-wordpress/luchshie-uchebniki-po-wordpress/">Лучшие учебники по Wordpress</a></li>
+							<li id="menu-item-1538"><a href="https://andreyex.ru/uslugi/prodvizhenie-sajtov/seo-v-wordpress-dlya-nachinayushhih/">SEO в WordPress для начинающих</a></li>
+						</ul>
+					</div>
+				</aside>							
+			</div>
+											
+			<div class="col-md-3 col-sm-6 col-sx-12">
+				<aside id="nav_menu-4" class="widget widget_nav_menu clearfix">
+					<div class="row-title">БАЗЫ ДАННЫХ</div>
+					<div class="menu-footer-menu-3-container">
+						<ul id="menu-footer-menu-3" class="menu">
+							<li id="menu-item-398"><a href="https://andreyex.ru/bazy-dannyx/">Базы данных</a></li>
+							<li id="menu-item-399"><a href="https://andreyex.ru/bazy-dannyx/uchebnoe-posobie-po-sql/">Учебное пособие по SQL</a></li>
+						</ul>
+					</div>
+				</aside>
+				
+				<aside id="nav_menu-5" class=" widget_nav_menu clearfix">
+					<div class="row-title">BOOTSTRAP</div>
+					<div class="menu-footer-menu-4-container">
+						<ul id="menu-footer-menu-4" class="menu">
+							<li id="menu-item-406"><a href="https://andreyex.ru/uchebnoe-posobie-po-framework-bootstrap/">Учебное пособие по Bootstrap</a></li>
+						</ul>
+					</div>
+				</aside>					
+				<aside id="nav_menu-7" class=" widget_nav_menu clearfix">									
+					<div class="row-title">PYTHON</div>
+					<div class="menu-footer-menu-5-container">
+						<ul id="menu-footer-menu-5" class="menu">
+							<li id="menu-item-407"><a href="https://andreyex.ru/yazyk-programmirovaniya-python/uchebnik-po-python-3/">Учебное пособие по Python 3</a></li>
+						</ul>
+					</div>
+				</aside>					
+				<aside id="nav_menu-7" class=" widget_nav_menu clearfix">					
+					<div class="row-title">JAVASCRIPT</div>
+					<div class="menu-footer-menu-6-container">
+						<ul id="menu-footer-menu-6" class="menu">
+							<li id="menu-item-408"><a href="https://andreyex.ru/yazyk-programmirovaniya-javascript/javascript-uchebnoe-posobie/">Учебное пособие по Javascript</a></li>
+						</ul>
+					</div>
+				</aside>					
+				<aside id="nav_menu-7" class=" widget_nav_menu clearfix">					
+					<div class="row-title">RUBY</div>
+					<div class="menu-footer-menu-7-container">
+						<ul id="menu-footer-menu-7" class="menu">
+							<li id="menu-item-408"><a href="https://andreyex.ru/yazyk-programmirovaniya-ruby/">Язык программирования Ruby</a></li>
+						</ul>
+					</div>
+				</aside>					
+			</div>
+					
+			<div class="col-md-3 col-sm-6 col-sx-12">
+				<aside id="text-2" class="widget widget_text clearfix">
+					<div class="row-title">ПОСЛЕДНИЕ СТАТЬИ</div>	
+					<div class="menu-footer-menu-8-container">
+						<ul id="menu-footer-menu-8" class="menu">
+													
+								<li class="fa fa-book" style="color: white;" id="menu-item-409"><a style="padding: 7px;" href="https://andreyex.ru/blog-platforma-wordpress/sposoby-usilit-bezopasnost-vashego-hostinga/">Способы усилить безопасность вашего хостинга</a></li> 
+
+																					
+								<li class="fa fa-book" style="color: white;" id="menu-item-409"><a style="padding: 7px;" href="https://andreyex.ru/kompaniya-apple-iphone-ipad-mac/kak-konvertirovat-lyubuyu-pesnyu-v-rington-na-vashem-iphone-besplatno/">Как конвертировать любую песню в рингтон на вашем iPhone бесплатно</a></li> 
+
+																					
+								<li class="fa fa-book" style="color: white;" id="menu-item-409"><a style="padding: 7px;" href="https://andreyex.ru/ubuntu/kak-ustanovit-mysql-8-0-na-ubuntu-18-04/">Как установить MySQL 8.0 На Ubuntu 18.04</a></li> 
+
+																					
+								<li class="fa fa-book" style="color: white;" id="menu-item-409"><a style="padding: 7px;" href="https://andreyex.ru/sites/support/rukovodstvo-po-soprovozhdeniyu-veb-sajta-klyuchevye-voprosy-dlya-postoyannogo-nablyudeniya/">Руководство по сопровождению веб-сайта. Ключевые вопросы для постоянного наблюдения</a></li> 
+
+																					
+								<li class="fa fa-book" style="color: white;" id="menu-item-409"><a style="padding: 7px;" href="https://andreyex.ru/centos-7/kak-ustanovit-postgresql-na-centos-8/">Как установить PostgreSQL на CentOS 8</a></li> 
+
+																					
+								<li class="fa fa-book" style="color: white;" id="menu-item-409"><a style="padding: 7px;" href="https://andreyex.ru/sites/7-sposobov-prodvizheniya-vashego-novogo-sajta-i-uvelicheniya-trafika/">7 способов продвижения вашего нового сайта и увеличения трафика</a></li> 
+
+																					
+								<li class="fa fa-book" style="color: white;" id="menu-item-409"><a style="padding: 7px;" href="https://andreyex.ru/blog-platforma-wordpress/6-luchshih-besplatnyh-tem-dlya-kafe-i-restorana-wordpress-2019-goda/">6 лучших бесплатных тем для кафе и ресторана WordPress 2019 года</a></li> 
+
+															 					
+						</ul>
+					</div>
+				</aside>					
+			</div>
+			
+			<div class="col-md-3 col-sm-6 col-sx-12">
+				<aside id="nav_menu-6" class="widget widget_nav_menu clearfix">
+					<div class="row-title">Другие статьи</div>
+					<div class="menu-footer-menu-2-container">
+						<ul id="menu-footer-menu-2" class="menu">
+							<li id="menu-item-1538"><a href="https://andreyex.ru/category/stati-partnerov/">Статьи партнеров</a></li>
+						</ul>
+					</div>
+				</aside>							
+			
+				<aside id="nav_menu-7" class="widget widget_nav_menu clearfix">		
+					<div class="row-title">По вопросам сотрудничества и рекламы на портале AndreyEx, обращаться на почту</div>
+					<ul class="footer4">
+						<li class="text-uppercase foot_mail text-underline">
+							<a href="mailto:admin@andreyex.ru">admin@andreyex.ru</a>
+						</li>
+					</ul>
+
+					<img class="lazy loaded" width="100%" src="https://andreyex.ru//wp-content/themes/sunrain/images/logo.png" data-src="https://andreyex.ru//wp-content/themes/sunrain/images/logo.png" alt="Логотип AndreyEx" data-was-processed="true">
+          
+          <div style="margin-top: 25px; text-align: -webkit-center;">
+		  
+		<div class="row">
+		  <div class="col-md-6 col-sm-6 col-sx-12">
+  <!-- Yandex.Metrika informer -->
+<a href="https://metrika.yandex.ru/stat/?id=12704389&amp;from=informer" target="_blank" rel="nofollow"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://informer.yandex.ru/informer/12704389/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer lazy" data-cid="12704389" data-lang="ru"></a>
+<!-- /Yandex.Metrika informer -->     
+</div>
+<div class="col-md-6 col-sm-6 col-sx-12">
+<!--LiveInternet counter--><script type="text/javascript">
+document.write('<a href="https://www.liveinternet.ru/click" '+
+'target="_blank"><img src="https://counter.yadro.ru/hit?t11.6;r'+
+escape(document.referrer)+((typeof(screen)=='undefined')?'':
+';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
+';h'+escape(document.title.substring(0,150))+';'+Math.random()+
+'" alt="" title="LiveInternet: показано число просмотров за 24'+
+' часа, посетителей за 24 часа и за сегодня" '+
+'border="0" width="88" height="31"><\/a>')
+</script><a href="https://www.liveinternet.ru/click" target="_blank"><img src="https://counter.yadro.ru/hit?t11.6;rhttps%3A//www.google.com/;s1920*1080*24;uhttps%3A//andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/;h%u041A%u0430%u043A%20%u043D%u0430%u0441%u0442%u0440%u043E%u0438%u0442%u044C%20Git-%u0441%u0435%u0440%u0432%u0435%u0440%20%u043D%u0430%20Linux;0.6677629081656453" alt="" title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня" border="0" width="88" height="31"></a><!--/LiveInternet-->
+
+</div>
+
+</div>
+</div>
+            </aside></div>
+          
+				
+			</div>
+		</div>
+
+  	<p class="bottom-copyright" style="float: left; margin: 0px; margin-top: 15px; color: aliceblue;">AndreyEx.ru - Создание и продвижение сайтов. 2021</p>
+	<div style="float: right; color: rgb(248, 15, 37); margin-top: 15px;">
+		<span class="letter">Д</span>изайн и верстка:  <a rel="nofollow" style="color: green;" title="Разработка и продвижение сайтов в интернете" href="mailto:webmaster@andreyex.ru">webmaster@andreyex.ru</a>
+    </div>
+	
+	</div> <!-- footer-content -->
+
+	  
+
+ <!-- footer -->
+	
+	    
+<div class="clear"> </div>
+
+<script>(function() {function maybePrefixUrlField() {
+	if (this.value.trim() !== '' && this.value.indexOf('http') !== 0) {
+		this.value = "http://" + this.value;
+	}
+}
+
+var urlFields = document.querySelectorAll('.mc4wp-form input[type="url"]');
+if (urlFields) {
+	for (var j=0; j < urlFields.length; j++) {
+		urlFields[j].addEventListener('blur', maybePrefixUrlField);
+	}
+}
+})();</script>		<!-- Kama WP Smiles -->
+				<script type="text/javascript">
+		function ksmInsert( aTag, txID ){
+
+			const tx = document.getElementById( txID );
+
+			tx.focus();
+
+			aTag = ' ' + aTag + ' ';
+
+			if( typeof tx.selectionStart != 'undefined' ){
+				let start = tx.selectionStart;
+				let end = tx.selectionEnd;
+
+				//let insText = tx.value.substring(start, end);
+				tx.value = tx.value.substr( 0, start ) + aTag + tx.value.substr( end );
+
+				let pos = start + aTag.length;
+				tx.selectionStart = pos;
+				tx.selectionEnd = pos;
+			}
+			else if( typeof document.selection != 'undefined' ){
+				let range = document.selection.createRange();
+				range.text = aTag;
+			}
+
+			document.querySelector( '.sm_container' ).style.display = 'none';
+
+			if( typeof tinyMCE != 'undefined' )
+				tinyMCE.execCommand( 'mceInsertContent', false, aTag );
+		}
+		</script>
+				<script type="text/javascript">
+			var tx = document.getElementById('comment');
+			if( tx ){
+				var
+				txNext = tx.nextSibling,
+				txPar  = tx.parentNode,
+				txWrapper = document.createElement('DIV');
+
+				txWrapper.innerHTML = '<div class=\"sm_list  qip\" style=\"width:30px; height:30px; background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/smile.gif); background-position:center center; background-repeat:no-repeat;\"onmouseover=\"var el = this.childNodes[0];if( el.style.display == \'block\' )return;el.style.display=\'block\';for( var i=0; i < el.childNodes.length; i++ ){var l = el.childNodes[i];var bg = l.getAttribute(\'bg\');if( bg )l.setAttribute( \'style\', bg );}\"onmouseout=\"this.childNodes[0].style.display = \'none\'\"><div class=\"sm_container\"><div class=\"smiles_button\" onclick=\"ksmInsert(\':-)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/smile.gif);\" title=\":-)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\':-(\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/sad.gif);\" title=\":-(\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\':-D\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/laugh.gif);\" title=\":-D\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:rofl:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/rofl.gif);\" title=\"(:rofl:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:blum:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/blum.gif);\" title=\"(:blum:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:kiss:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/kiss.gif);\" title=\"(:kiss:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:yes:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/yes.gif);\" title=\"(:yes:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:no:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/no.gif);\" title=\"(:no:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:good:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/good.gif);\" title=\"(:good:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:bad:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bad.gif);\" title=\"(:bad:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:unknw:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/unknw.gif);\" title=\"(:unknw:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:sorry:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/sorry.gif);\" title=\"(:sorry:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:pardon:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/pardon.gif);\" title=\"(:pardon:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:wacko:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/wacko.gif);\" title=\"(:wacko:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:acute:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/acute.gif);\" title=\"(:acute:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:boast:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/boast.gif);\" title=\"(:boast:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:boredom:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/boredom.gif);\" title=\"(:boredom:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:dash:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/dash.gif);\" title=\"(:dash:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:search:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/search.gif);\" title=\"(:search:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:crazy:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/crazy.gif);\" title=\"(:crazy:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:yess:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/yess.gif);\" title=\"(:yess:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:cool:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/cool.gif);\" title=\"(:cool:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:aggressive:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/aggressive.gif);\" title=\"(:aggressive:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:angel:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/angel.gif);\" title=\"(:angel:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:bb:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bb.gif);\" title=\"(:bb:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:beach:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/beach.gif);\" title=\"(:beach:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:beee:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/beee.gif);\" title=\"(:beee:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:big_boss:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/big_boss.gif);\" title=\"(:big_boss:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:blush:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/blush.gif);\" title=\"(:blush:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:bomb:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bomb.gif);\" title=\"(:bomb:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:bravo:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bravo.gif);\" title=\"(:bravo:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:buba:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/buba.gif);\" title=\"(:buba:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:bye:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/bye.gif);\" title=\"(:bye:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:cry:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/cry.gif);\" title=\"(:cry:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:gamer4:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/gamer4.gif);\" title=\"(:gamer4:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:give_rose:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/give_rose.gif);\" title=\"(:give_rose:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:heart:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/heart.gif);\" title=\"(:heart:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:help:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/help.gif);\" title=\"(:help:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:hi:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/hi.gif);\" title=\"(:hi:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:laugh1:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/laugh1.gif);\" title=\"(:laugh1:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:mail:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/mail.gif);\" title=\"(:mail:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:mda:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/mda.gif);\" title=\"(:mda:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:mosking:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/mosking.gif);\" title=\"(:mosking:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:music:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/music.gif);\" title=\"(:music:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:negative:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/negative.gif);\" title=\"(:negative:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:curtsey:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/curtsey.gif);\" title=\"(:curtsey:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:popcorm:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/popcorm.gif);\" title=\"(:popcorm:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:punish:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/punish.gif);\" title=\"(:punish:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:rtfm:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/rtfm.gif);\" title=\"(:rtfm:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:sarcastic:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/sarcastic.gif);\" title=\"(:sarcastic:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:secret:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/secret.gif);\" title=\"(:secret:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:shock:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/shock.gif);\" title=\"(:shock:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:shout:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/shout.gif);\" title=\"(:shout:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:thank_you:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/thank_you.gif);\" title=\"(:thank_you:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:vava:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/vava.gif);\" title=\"(:vava:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:victory:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/victory.gif);\" title=\"(:victory:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:dance:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/dance.gif);\" title=\"(:dance:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:dash2:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/dash2.gif);\" title=\"(:dash2:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:declare:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/declare.gif);\" title=\"(:declare:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:diablo:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/diablo.gif);\" title=\"(:diablo:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:don-t_mention:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/don-t_mention.gif);\" title=\"(:don-t_mention:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:drinks:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/drinks.gif);\" title=\"(:drinks:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:focus:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/focus.gif);\" title=\"(:focus:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:fool:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/fool.gif);\" title=\"(:fool:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:friends:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/friends.gif);\" title=\"(:friends:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:gamer:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/gamer.gif);\" title=\"(:gamer:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:ok:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/ok.gif);\" title=\"(:ok:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:wink:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/wink.gif);\" title=\"(:wink:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:yu:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/yu.gif);\" title=\"(:yu:)\"></div><div class=\"smiles_button\" onclick=\"ksmInsert(\'(:air_kiss:)\', \'comment\');\" bg=\"background-image:url(https://andreyex.ru/wp-content/plugins/kama-wp-smile/packs/qip/air_kiss.gif);\" title=\"(:air_kiss:)\"></div></div></div>';
+				txWrapper.setAttribute('class', 'kws-wrapper');
+				txWrapper.appendChild(tx);
+				txWrapper = txPar.insertBefore(txWrapper, txNext);
+			}
+		</script>
+		<script type="text/javascript" id="post-views-counter-frontend-js-extra">
+/* <![CDATA[ */
+var pvcArgsFrontend = {"mode":"ajax","requestURL":"https:\/\/andreyex.ru\/wp-content\/plugins\/post-views-counter\/includes\/ajax.php","postID":"62513","nonce":"c514371982"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="wp-polls-js-extra">
+/* <![CDATA[ */
+var pollsL10n = {"ajax_url":"https:\/\/andreyex.ru\/wp-admin\/admin-ajax.php","text_wait":"\u0412\u0430\u0448 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0437\u0430\u043f\u0440\u043e\u0441 \u0435\u0449\u0435 \u043e\u0431\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u0435\u0442\u0441\u044f. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043f\u043e\u0434\u043e\u0436\u0434\u0438\u0442\u0435 ...","text_valid":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u043e \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043e\u0442\u0432\u0435\u0442.","text_multiple":"\u041c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u043e \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0435 \u0447\u0438\u0441\u043b\u043e \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432:","show_loading":"1","show_fading":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/andreyex.ru\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/andreyex.ru\/wp-admin\/admin-ajax.php","text_wait":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043d\u0435 \u0433\u043e\u043b\u043e\u0441\u0443\u0439\u0442\u0435 \u0437\u0430 \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0437\u0430\u043f\u0438\u0441\u0435\u0439 \u043e\u0434\u043d\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e.","image":"stars","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://andreyex.ru/wp-content/plugins/wp-postratings/images/stars/rating_over.gif?x13673";;
+/* ]]> */
+</script>
+<script type="text/javascript" id="mistape-front-js-extra">
+/* <![CDATA[ */
+var decoMistape = {"ajaxurl":"https:\/\/andreyex.ru\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://andreyex.ru/wp-content/plugins/bwp-minify/min/?f=wp-content/plugins/ax-scrollto-top/js/ax-scrollto-top.js,wp-content/plugins/post-views-counter/js/frontend.js,wp-content/plugins/worth-the-read/js/wtr.js,wp-content/plugins/wp-polls/polls-js.js,wp-content/plugins/wp-postratings/js/postratings-js.js,wp-content/plugins/mistape/assets/js/modernizr.custom.js,wp-content/plugins/mistape/assets/js/mistape-front.js,wp-content/themes/sunrain/js/js.js,wp-content/themes/sunrain/js/classie.js,wp-content/themes/sunrain/js/bootstrap.min.js,wp-content/themes/sunrain/js/jquery.magnific-popup.min.js,wp-content/plugins/akismet/_inc/form.js,wp-content/plugins/mailchimp-for-wp/assets/js/forms.min.js&amp;ver=1613811588"></script>
+<div id="mistape_dialog" data-mode="comment" data-dry-run="0">
+			           <div class="dialog__overlay"></div><div class="dialog__content"><div id="mistape_confirm_dialog" class="mistape_dialog_screen">
+					<div class="dialog-wrap">
+						<div class="dialog-wrap-top">
+							<h2>Сообщить об опечатке</h2>
+							 <div class="mistape_dialog_block">
+								<h3>Текст, который будет отправлен нашим редакторам:</h3>
+								<div id="mistape_reported_text"></div>
+							 </div>
+							 </div>
+						<div class="dialog-wrap-bottom"><div class="mistape_dialog_block comment">
+				        <h3><label for="mistape_comment">Ваш комментарий (необязательно):</label></h3>
+				        <textarea id="mistape_comment" cols="60" rows="3" maxlength="1000"></textarea>
+			         </div><div class="pos-relative">
+						</div>
+					</div>
+			    </div>
+			    <div class="mistape_dialog_block">
+					<a class="mistape_action" data-action="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/send" data-id="62513" role="button">Отправить</a>
+					<a class="mistape_action" data-dialog-close="" role="button" style="display:none">Отмена</a>
+				</div>
+				<div class="mistape-letter-front letter-part">
+				    <div class="front-left"></div>
+				    <div class="front-right"></div>
+				    <div class="front-bottom"></div>
+				</div>
+				<div class="mistape-letter-back letter-part">
+					<div class="mistape-letter-back-top"></div>
+				</div>
+				<div class="mistape-letter-top letter-part"></div>
+			</div></div></div><a href="https://andreyex.ru/operacionnaya-sistema-linux/kak-nastroit-git-server-na-linux/#" id="axScrollTo" class="axScrollToTop" style="display: block;"><img class="lazy loaded" src="https://andreyex.ru/wp-content/plugins/ax-scrollto-top/images/1.png?x13673" data-src="https://andreyex.ru/wp-content/plugins/ax-scrollto-top/images/1.png?x13673" data-was-processed="true"></a>
+<div style="display: none;">
+<!-- begin of Top100 code -->
+<!--
+<script id="top100Counter" type="text/javascript" src="https://counter.rambler.ru/top100.jcn?3114304"></script>
+  <noindex>
+    
+<noscript>
+  
+<a href="https://top100.rambler.ru/navi/3114304/">
+<img class="lazy" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://counter.rambler.ru/top100.cnt?3114304" alt="Rambler's Top100" border="0" />
+</a>
+</noscript>
+    </noindex>
+-->
+<!-- end of Top100 code -->
+</div>
+
+
+ <div id="forma_backcall">
+   <p style="margin:40px 20px 20px 20px; font-size:26px;">Заполните форму и наш менеджер перезвонит Вам в самое ближайшее время!</p> 
+   <img class="close_btn lazy" alt="badge" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/themes/sunrain/images/krestik.png?x13673">
+   <div class="form_order">
+ 		<form>		
+			<div class="hidestring">Обратный звонок 1</div>
+			
+			<input type="text" name="name" id="name" value="  Введите Ваше имя" onfocus="if(this.value == '  Введите Ваше имя') this.value = '';" onblur="if(!this.value) this.value = '  Введите Ваше имя';"> 	              
+
+			<input type="text" name="phone" id="phone" value="  Введите Ваш телефон" onfocus="if(this.value == '  Введите Ваш телефон') this.value = '';" onblur="if(!this.value) this.value = '  Введите Ваш телефон';">         
+
+    		<img class="lazy" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/themes/sunrain/images/back_call_butt.png?x13673" style="margin:25px; margin-bottom:10px; border:0px; cursor:pointer; margin-top: 5px;" alt="Отправить" title="Отправить"> 
+		</form>
+   </div>
+ </div>
+
+  
+<div id="thanks">
+  	<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/themes/sunrain/images/galka.png?x13673" alt="galka" class="galka lazy">
+  	<p style="margin: 55px 0px 20px 130px; font-size:24px; text-transform:none; position:absolute;">Спасибо! Ваша заявка принята</p>
+  	<img class="close_btn lazy" title="Закрыть окно" alt="close" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/themes/sunrain/images/krestik.png?x13673" onclick="yaCounter12704389.reachGoal('ZVONOK'); return true;">
+</div> 
+
+<div id="thanks2">
+  	<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/themes/sunrain/images/galka.png?x13673" alt="galka" class="galka lazy">
+  	<p style="margin: 55px 0px 20px 130px; font-size:24px; text-transform:none; position:absolute;">Спасибо! Ваша заявка принята</p>
+  	<img class="close_btn lazy" title="Закрыть окно" alt="close" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://andreyex.ru/wp-content/themes/sunrain/images/krestik.png?x13673" onclick="yaCounter12704389.reachGoal('AKCIYA'); return true;">
+</div> 
+
+<div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div></div></div></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.5&appId=1642298016014143";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+  
+  <!--
+<script>
+				
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+				menuLeftmini = document.getElementById( 'cbp-spmenu-s1' ),
+				showLeftPush = document.getElementById( 'showLeftPush' ),
+				body = document.body;
+
+			showLeftmini.onclick = function() {
+				classie.toggle( this, 'active' );
+				classie.toggle( menuLeft, 'cbp-spmenu-open' );
+			}; 
+
+			function disableOther( img ) {
+				if( img == 'showLeft' ) {
+					classie.toggle( showLeft, 'disabled' );
+				}
+			}
+</script>		
+-->
+
+<noscript><div><img class="lazy" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201%201'%3E%3C/svg%3E" data-src="https://mc.yandex.ru/watch/12704389" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+ <!-- Включает все скомпилированные плагины (ниже), или включает отдельные файлы по мере необходимости -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	  
+<script>window.w3tc_lazyload=1,window.lazyLoadOptions={elements_selector:".lazy",callback_loaded:function(t){var e;try{e=new CustomEvent("w3tc_lazyload_loaded",{detail:{e:t}})}catch(a){(e=document.createEvent("CustomEvent")).initCustomEvent("w3tc_lazyload_loaded",!1,!1,{e:t})}window.dispatchEvent(e)}}</script><script async="" src="https://andreyex.ru/wp-content/plugins/w3-total-cache/pub/js/lazyload.min.js?x13673"></script>
+
+<amp-auto-ads type="adsense" data-ad-client="ca-pub-5929365381204095">
+</amp-auto-ads>
+
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/
+
+Object Caching 3060/3934 objects using memcached
+Page Caching using memcached 
+Lazy Loading (ленивая загрузка)
+Database Caching 20/829 queries in 0.366 seconds using memcached (Request-wide modification query)
+
+Served from: andreyex.ru @ 2021-02-24 18:33:49 by W3 Total Cache
+--><div id="fancybox-tmp"></div><div id="fancybox-loading"><div></div></div><div id="fancybox-overlay"></div><div id="fancybox-wrap" class="fancybox-ie"><div id="fancybox-outer"><div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div><div id="fancybox-content"></div><a id="fancybox-close"></a><div id="fancybox-title"></div><a id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a><a id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a></div></div><div id="wtr-progress" class="right shown mute" style="background: rgb(255, 255, 255); opacity: 0.5; width: 5px; right: -11px;"><div id="wtr-slider" style="background: rgb(244, 72, 19); opacity: 0.5; top: -32.78%;"></div></div></body>
+
+<amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-5929365381204095">
+</amp-auto-ads>
+
+</html>
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/
+
+Object Caching 2812/4061 objects using memcached
+Page Caching using memcached 
+Lazy Loading (ленивая загрузка)
+Database Caching 240/951 queries in 0.404 seconds using memcached
+
+Served from: andreyex.ru @ 2021-02-24 19:43:49 by W3 Total Cache
+-->
