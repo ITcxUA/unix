@@ -1,0 +1,54 @@
+#!/bin/bash
+
+
+
+## This guide will walk you through the steps to create a Certificate Signing Request, (CSR for short.) SSL certificates are the industry-standard means of securing web traffic to and from your server, and the first step to getting your own SSL is to generate a CSR. This guide is written specifically for CentOS 7.
+## Log onto your server using SSH.
+## Enter the following command at the prompt.
+## Note:
+## Replace $MYDOMAIN with your actual domain name.
+
+#============ ≠≠≠≠ ============
+## You will be prompted to answer a series of questions, explained below.
+#===
+##== Country Name – This is the two-letter abbreviation for your country. For example, United States would be US and Great Britain would be GB.
+
+##=== State or Province Name – This is the full name of the state your organization operates from. For example, this might be “California” or “Michigan”.
+
+##=== Locality Name – Name of the city your organization operates from. Examples might include “Lansing” or “Phoenix”. Don’t use abbreviations in this field. For example, “St. Helena” should be “Saint Helena”.
+
+##=== Organization Name – The name of your organization. If you are a business, use must use your legal name. If you are applying as an individual, you use your full name instead.
+
+##=== Organizational Unit Name – If applying as a business, you can enter your “Doing Business As” (DBA) name here. Alternately, you can use a department name here. For example, “IT Department” or “Web Administration”.
+
+##=== Common Name – The domain name that you are purchasing a SSL certificate for. This must be a fully qualified domain name (FQDN). An example might be $MYDOMAIN.com.
+
+## Note:
+## If you are applying for a special wildcard SSL certificate, you will need to enter an asterisk for the subdomain. An example in that case might be *.$MYDOMAIN.com. Never include the “http://”, “https://”, or any other special characters in this field. Never include text after the top level domain at the end. For example, your common name should end in .com, .net, (or whatever other extension you are applying for.)
+
+##==, Email Address – An email address that can be used as a point of contact for your domain. Be sure the address is valid!
+
+##=== A challenge password – An optional password to further secure your certificate. Be sure to remember this password if you choose to use it. It must be at least 4 characters long. You can skip this step if you like.
+
+##=== An optional company name – Another optional step. Fill in your company name if you wish. This is not required for web SSL certificates.
+## Your CSR file has now been generated!
+## Finding Your CSR
+## Take a look at the contents of your current working directory with the “ls” command. You should notice two new files ending with “.key” and “.csr” respectively.
+
+#============ ≠≠≠≠ ============
+
+## The .key file should be kept private on your server. The .csr file is your certificate signing request, and can be sent to a Certificate Authority. You can inspect the contents of the CSR by using the “cat” command. Here is an example of the CSR generated in this walk through:
+
+##============ ≠≠≠≠ ============
+
+echo 'Enter domen: ';
+read MYDOMAIN;
+sleep;
+
+openssl req -new -newkey rsa:2048 -nodes -keyout "$MYDOMAIN".key -out "$MYDOMAIN".csr ;
+sleep;
+ls -l total 8 -rw-r--r--. 1 root root 1082 Jan 31 12:10 "$MYDOMAIN".csr -rw-------. 1 root root 1704 Jan 31 12:10 "$MYDOMAIN".key;
+sleep
+cat "$MYDOMAIN".csr;
+
+exit
