@@ -312,10 +312,6 @@ mtu_change()
 {
 ifconfig $1 mtu $2
 }
-
-
-
-
 #Функция проверки установленного приложения, exist возвращает true если установлена и false, если нет.
 installed()
 {
@@ -339,11 +335,11 @@ fi
 #функция которая открывает на редактирование файл в приоритете: mc, nano, vi
 edit()
 {
-installed nano
-if [ $exist == true ]; then nano  $1
+installed mc
+if [ $exist == true ]; then mcedit  $1
   else
-  installed mc
-  if [ $exist == true ]; then mcedit  $1
+  installed nano
+  if [ $exist == true ]; then nano  $1
     else
     vi $1
   fi
