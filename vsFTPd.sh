@@ -104,6 +104,8 @@ passwd ftp-user
 # отключить проверку оболочки в настройках pam для vsftpd.
 FTPPAM="/etc/pam.d/vsftpd"
 tar czvf /etc/pam.d.$DATA.tar.gz /etc/pam.d
+cat /etc/pam.d/vsftpd > /etc/pam.d/vsftpd.bac
+echo "#" > /etc/pam.d/vsftpd
 cat>> $FTPPAM <<EOF
 #%PAM-1.0
 session    optional     pam_keyinit.so    force revoke
