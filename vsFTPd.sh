@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#  wget https://raw.githubusercontent.com/numbnet/unix/master/vsFTPd.sh
+
 wait() { 
 echo "Нажмите клавишу,чтобы продолжить.";
 read -s -n 1; 
