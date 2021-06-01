@@ -2,7 +2,16 @@
 
 ##==== vsftpd VIRTUAL USER ====##
 DATA = $(date +%Y%m%d-%H%M%S);
-ADD_VIRTUSER = '/etc/vsftpd/add_virt_user.sh'
+#ADD_VIRTUSER = '/etc/vsftpd/add_virt_user.sh'
+ADD_VIRTUSER = '~/add_virt_user.sh'
+
+ArhTar() {
+	DATA=$(date +%Y%m%d-%H%M%S);
+	PWD=$(pwd)
+	echo "Arh directory $PWD "
+	tar czvf $PWD.$DATA.tar.gz $PWD
+
+}
 
 # Рассмотрим вариант, когда пользователи ftp сервера не должны пересекаться с локальными. В данном примере будут работать только виртуальные пользователи. Я мельком проверил, можно ли настроить и тех и других, оказалось, что можно. Но там надо аккуратно с правами разбираться и со списками разрешенных пользователей. Я решил, что не буду описывать эту ситуацию, так как не очень представлю, когда она может пригодиться. Если кому-то надо, то на базе этой статьи он сам сможет разобраться.
 
@@ -32,8 +41,11 @@ account    required pam_userdb.so db=/etc/vsftpd/virt_users
 session    required pam_loginuid.so
 EOF
 
-# Рисуем следующий конфиг для vsftpd vsftpd.conf Создаем файл с виртуальными пользователями:
+# конфиг для vsftpd vsftpd.conf с виртуальными пользователями:
 # mcedit /etc/vsftpd/vsftpd.conf
+
+cd /etc/vsftpd/
+ArhTar
 
 cat > /etc/vsftpd/vsftpd.conf <<EOF
 ################################
@@ -118,7 +130,8 @@ pasv_max_port=55000
 EOF
 
 touch /etc/vsftpd/virt_users
-#Добавляем туда в первую строку имя пользователя, во вторую его пароль. В конце не забудьте перейти на новую строку, это важно. Файл должен быть примерно таким:
+#Добавляем туда в первую строку имя пользователя, во вторую его пароль. 
+#В конце не забудьте перейти на новую строку, это важно. Файл должен быть примерно таким:
 cat > /etc/pam.d/vsftpd <<EOF
 ftp-virt1
 password1
@@ -160,6 +173,8 @@ EOF
 
 # Делаете файл исполняемым и запускаете:
 chmod 0700 $ADD_VIRTUSER
+chmod +x $ADD_VIRTUSER
 $ADD_VIRTUSER
 
 #==== пользователь добавлен, можно сразу авиориз
+exit 0
