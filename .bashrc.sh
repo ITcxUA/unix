@@ -1,74 +1,162 @@
 #!/bin/bash
 
-wait() { echo ""; echo "Press any key to continue..."; read -s -n 1; }
+
+wait() {
+	echo "";
+	echo "Press any key to continue...";
+	read -s -n 1;
+}
+ENDcom() { 
+	echo "";
+	echo "Press any key to EXIT..."; 
+	read -s -n 1;
+}
 
 
 echo "******************************"
 echo "Внести правки в файл .bashrc ?"
-wait
-echo "Вносим . . ."
-echo " "
-sleep 5
+sleep 1
 
-#################################################
-cat>> ~/.bashrc <<EOF
+#############################
+funcBASHRCcomDEF() {
+	clear
+	echo 'Копируем.....'
+	#wait
+	sleep 2
 
-## * * * * * * * * * * * * * * * * * * * * * * ##
-##              | BASH COMMANDS |              ##
-## * * * * * * * * * * * * * * * * * * * * * * ##
+	mkdir -p ~/TMP
+	cat ~/.bashrc > ~/TMP/bashrc
+	cat ~/TMP/bashrc > ~/.bashrc
+	sed -i "s/alias rm='rm -i'/alias rm='rm -rf'/" ~/.bashrc
+	echo '============ NEXT ================='
+}
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Aliases
-alias rm='rm -rf'
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Date and Time:
-export HISTTIMEFORMAT="%Y%m%d %H:%M:%S [$(whoami)@$(hostname -b) ]# "
+funcBASHRCstok() {
+	clear
+	echo 'Создаем Дефолтные'
+	#wait
+	sleep 2
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Увеличиваем размер и количество строк:
-export HISTSIZE=50000
-export HISTFILESIZE=50000
+	echo '# .bashrc' > ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '# User specific aliases and functions' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo "alias rm='rm -rf'" >> ~/.bashrc 
+	echo "alias cp='cp -i'" >> ~/.bashrc 
+	echo "alias mv='mv -i'" >> ~/.bashrc 
+	echo "alias ls='ls -a'" >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '# Source global definitions' >> ~/.bashrc 
+	echo 'if [ -f /etc/bashrc ]; then' >> ~/.bashrc 
+	echo '        . /etc/bashrc' >> ~/.bashrc 
+	echo 'fi' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '============ NEXT ================='
+}
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## COMMANDS Bash in history: 
-shopt -s histappend
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Мгновенно Сохранять Историю РАНЕЕ:
-## \\// -| НЕ ЗАДАНА |- :
-PROMPT_COMMAND='history -a'
-## \\// -|  ЗАДАНА   |- :
-#PROMPT_COMMAND='$PROMPT_COMMAND; history -a'
+## * * * * * * * * * * * * * * * * * * * *
+funcBASHcommands() {
+	echo '## * * * * * * * * * * * * * * * * * * * * * ##'
+	echo '##             | BASH COMMANDS |             ##'
+	echo '## * * * * * * * * * * * * * * * * * * * * * ##'
+	#wait
+	sleep 2
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Control Bash History
-export HISTCONTROL=ignorespace:erasedups        # HISTCONTROL — список опций, разделенных двоеточиями.
- 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Игнорировать Команд:
-export HISTIGNORE="ls:ps:history"               # Не сохранять команды ls, ps и history: 
+	echo '## * * * * * * * * * * * * * * * * * * * * * ##' >> ~/.bashrc 
+	echo '##             | BASH COMMANDS |             ##' >> ~/.bashrc 
+	echo '## * * * * * * * * * * * * * * * * * * * * * ##' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## Date and Time:' >> ~/.bashrc 
+	echo 'export HISTTIMEFORMAT="%Y%m%d %H:%M%S [$(whoami)@$(hostname -b)]# "' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## Увеличиваем размер и количество строк:' >> ~/.bashrc 
+	echo 'export HISTSIZE=50000' >> ~/.bashrc 
+	echo 'export HISTFILESIZE=50000' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## COMMANDS Bash in history: ' >> ~/.bashrc 
+	echo 'shopt -s histappend' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## Control Bash History' >> ~/.bashrc 
+	echo '## HISTCONTROL — список опций, раздел.двоеточ' >> ~/.bashrc 
+	echo 'export HISTCONTROL=ignorespace:erasedups' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## Игнорировать Команд:' >> ~/.bashrc 
+	echo '## Не сохранять команды ls, ps и history: ' >> ~/.bashrc 
+	echo '# export HISTIGNORE="ls:ps:history"' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## Исправление случайных ошибок.' >> ~/.bashrc 
+	echo 'shopt -s cdspell' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## все строки многостроч.,в одной записи' >> ~/.bashrc 
+	echo 'shopt -s cmdhist' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## Файла с Историею Команд' >> ~/.bashrc 
+	echo 'export HISTFILE=~/.history_"$USER"' >> ~/.bashrc
+	echo '============ NEXT ================='
+}
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Исправление случайных ошибок.
-shopt -s cdspell
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## все строки многостроч.,в одной записи
-shopt -s cmdhist
+########################################
+funcBASHRCinfo() {
+	#wait
+	echo ' Запись Info '
+	sleep 2
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Файла с Историею Команд
-export HISTFILE=~/.history_"$USER"
+	echo '' >> ~/.bashrc 
+	echo '' >> ~/.bashrc 
+	echo '## * * * * * * * * * * * * * * * * * * * * * ##' >> ~/.bashrc 
+	echo '##              |     info     |             ##' >> ~/.bashrc 
+	echo '## * * * * * * * * * * * * * * * * * * * * * ##' >> ~/.bashrc 
+	echo '##' >> ~/.bashrc 
+	echo '##  Применить изменения в ~/.bashrc:' >> ~/.bashrc 
+	echo '## $(source ~/.bashrc)' >> ~/.bashrc 
+	echo '##' >> ~/.bashrc 
+	echo '## * * * * * * * * * * * * * * * * * * * * * ##' >> ~/.bashrc 
+	echo '============ NEXT ================='
+}
 
-## * * * * * * * * * * * * * * * * * * * * * * 
-## Применить изменения в ~/.bashrc:
-#$ source ~/.bashrc
-EOF
+########################################
+funcPROMPT_COMMAND() {
+	
+	echo 'Внесем изминения в файл  '
+	wait
+	sleep 2
+	
+    bashrcCOMM="PROMPT_COMMAND"
+    if grep $bashrcCOMM ~/.bashrc
+    then
+      		#funcBASHRCcomDEF
+	      	funcBASHRCstok
+      		funcBASHcommands
+	      	funcBASHRCinfo
+        echo "" >> ~/.bashrc
+        # echo "## Мгновенно Сохранять Историю ( ЗАДАНА РАНЕЕ )" >> ~/.bashrc
+        # echo "PROMPT_COMMAND='\$PROMPT_COMMAND; history -a'" >> ~/.bashrc
+        sed -i "s/^.*PROMPT_COMMAND*.*$/PROMPT_COMMAND='\$PROMPT_COMMAND; history -a'/" ~/.bashrc
+    else
+	      	#funcBASHRCcomDEF
+      		funcBASHRCstok
+      		funcBASHcommands
+      		funcBASHRCinfo
+        echo "" >> ~/.bashrc
+        echo "## Мгновенно Сохранять Историю ( НЕ ЗАДАНА РАНЕЕ ):" >> ~/.bashrc
+        echo "PROMPT_COMMAND='history -a'" >> ~/.bashrc
+    fi
 
-echo "Применяем параметры"
-sleep 5
-source ~/.bashrc
-echo "Добавили и применили. Выйти?"
-wait
+	funcBASHRCinfo
+	echo "Применим команды ~/.bashrc "
+	wait
+	sleep 2
+	source ~/.bashrc
+	sleep 3
+	echo '============ NEXT ================='
+}
+funcPROMPT_COMMAND;
+
+ENDcom;
+
 exit
