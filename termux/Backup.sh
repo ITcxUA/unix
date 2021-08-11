@@ -38,12 +38,12 @@ ResticRepo() {
 		then
 			echo "$RESTIC_REPOSITORY NOT exists. Now create dir"
 			mkdir $RESTIC_REPOSITORY | VarRESTIC
-				elif [[ ! -d $RESTIC_REPOSITORY ]];
+		elif [[ ! -d $RESTIC_REPOSITORY ]];
 			then
-				echo "$RESTIC_REPOSITORY exists, but is not a dir!!!" 1>&2
-				echo "======== dir ========"
-				# rm -rf $RESTIC_REPOSITORY
-				# mkdir -p $RESTIC_REPOSITORY
+			echo "$RESTIC_REPOSITORY exists, but is not a dir!!!" 1>&2
+			echo "======== dir ========"
+			# rm -rf $RESTIC_REPOSITORY
+			# mkdir -p $RESTIC_REPOSITORY
 
 	fi
 }
@@ -77,9 +77,11 @@ InstallRESTIC() {
 ##============ ≠≠≠ ============
 ## Backing up
 StartBackup() {
-	echo '## ==================================== ##'
-	echo '## ==         BACKUP RESTIC          == ##'
-	echo '## ==================================== ##'
+	echo '''
+	## ==================================== ##
+	## ==         BACKUP RESTIC          == ##
+	## ==================================== ##
+	'''     $$$@@@###
 	
 	VarRESTIC
 	StoragePerm
