@@ -156,3 +156,28 @@
 <p>А уже отсюда вы можете извлечь любой файл или перенести все это в реальную файловую систему с помощью cp -p.</p>
 
 <p>Резервное копирование Ubuntu 16.04 очень важно для поддержания вашей операционной системы в нормальном состоянии. В случае любой неожиданной ситуации вы сможете все восстановить. Если вас интересуют графические программы для бэкапа, вы можете попробовать remastersys или <a href="https://losst.ru/otkat-sistemy-ubuntu">timeshift</a>. Надеюсь, эта информация была полезной для вас.</p>
+  
+  ---------------------------------------
+  <div class="code-toolbar">
+<div class="context">
+<pre class="code-pre command prefixed language-bash">
+<code class="code-highlight  language-bash">
+<span class="token function">
+</span>
+<ul class="prefixed">
+<span class="token function">
+</span>
+<li class="line" data-prefix="$">
+<span class="token function">sudo</span> dnf <span class="token function">install</span> nginx
+</li>
+</ul>
+</code>
+</pre>
+<span style="font-size: 0px; line-height: 0; opacity: 0; pointer-events: none; position: absolute;">&nbsp;</span>
+</div>
+<div class="toolbar">
+<div class="toolbar-item">
+<button>Copy</button>
+</div>
+</div>
+</div>
