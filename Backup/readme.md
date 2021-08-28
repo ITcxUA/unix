@@ -79,7 +79,7 @@ dpkg --get-selections | grep -v deinstall &gt; backup.txt
 <p>Далее, скопируйте полученный файл в надежное место. Когда система сломается, переустановите ее с установочного носителя, а затем просто выполните команды:</p>
 <p>
 <pre><code>
-sudo dpkg --set-selections &lt; backup.txt</code>
+sudo dpkg --set-selections backup.txt
 </code></pre>
 </p>
 <p>
@@ -172,13 +172,31 @@ sudo dd if=~/backup.img of=/dev/sda4
 <h3>
 <span class="ez-toc-section" id="%D0%A1%D0%BF%D0%BE%D1%81%D0%BE%D0%B1_5_%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5_Squashfs_%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%B0">
 
-  </span>Способ 5. Создание Squashfs образа<span class="ez-toc-section-end">
+</span>Способ 5. Создание Squashfs образа<span class="ez-toc-section-end">
 </span>
 </h3>
 <p>Преимущество Squashfs в том, что это полноценная файловая система в одном файле, которую можно очень быстро примонтировать и быстро извлечь нужные файлы. Кроме того, файловую систему можно открыть привычными менеджерами архивов. Для создания образа со всей системы используйте:</p>
 <p>
 <pre><code>
-sudo mksquashfs / /root-backup.sqsh -e root-backup.sqsh home media dev run mnt proc sys tmp
+apt install squashfs-tools
+</code></pre>
+<pre><code>
+sudo mksquashfs / /root-backup.sqsh -e root-backup.sqsh \
+boot \
+dev \
+etc \
+home \
+media \
+mnt \
+opt \
+proc \
+root \
+run \
+srv \
+sys \
+tmp \
+usr \
+var
 </code></pre>
 
 </p>
@@ -188,16 +206,14 @@ sudo mksquashfs / /root-backup.sqsh -e root-backup.sqsh home media dev run mnt p
 </a>
 </p>
 <p>Теперь, чтобы примонтировать созданный образ будет достаточно набрать такую команду:</p>
-<p>
+
 <pre><code>
 sudo mount /root-backup.sqsh /mnt/ -t squashfs -o loop
 </code></pre>
-
-</p>
-
-
-<p>А уже отсюда вы можете извлечь любой файл или перенести все это в реальную файловую систему с помощью cp -p.</p>
-
+<pre><code>
+# А уже отсюда вы можете извлечь любой файл или перенести все это в реальную файловую систему с помощью 
+cp -p
+</code></pre>
 <p>Резервное копирование Ubuntu 16.04 очень важно для поддержания вашей операционной системы в нормальном состоянии. В случае любой неожиданной ситуации вы сможете все восстановить. Если вас интересуют графические программы для бэкапа, вы можете попробовать remastersys или <a href="https://losst.ru/otkat-sistemy-ubuntu">timeshift</a>. Надеюсь, эта информация была полезной для вас.</p>
   
   ---------------------------------------
