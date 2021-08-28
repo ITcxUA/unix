@@ -181,7 +181,8 @@ sudo dd if=~/backup.img of=/dev/sda4
 apt install squashfs-tools
 </code></pre>
 <pre><code>
-sudo mksquashfs / /root-backup.sqsh -e root-backup.sqsh \
+DATA=$(date +%Y%m%d_%H%M%S);
+sudo mksquashfs / /root-backup_$DATA.sqsh -e root-backup.sqsh \
 boot \
 dev \
 etc \
