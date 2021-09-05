@@ -34,6 +34,22 @@ echo "  9) " ;
 echo "*********************";
 }
 
+menu1() {
+echo "****  -select-  *****";
+echo "*********************";
+echo "  1) ";
+echo "  2) ";
+echo "  3) ";
+echo "  4) ";
+echo "  5) ";
+echo "  6) ";
+echo "  7) ";
+echo "  8) ";
+echo "  9) ";
+echo "*********************";
+}
+
+
 menu
 read n
 case $n in
@@ -45,6 +61,14 @@ case $n in
   6) Optimization;;
   7) AddDOMAIN;;
   8) ADDWP;;
-  9) ;;
-  *) echo "$n-ERROR. EXIT";sleep 3;exit;;
+  9) 
+menu1
+read n
+case $n in
+  1) echo "Select $n";;
+  0) echo "$n-ERROR. EXIT";sleep 3;;
+esac
+
+;;
+  *) echo "$n-ERROR. EXIT";sleep 3;;
 esac
