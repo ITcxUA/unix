@@ -16,8 +16,8 @@ EOF
 
 
 mkdir -p /temp && cd /temp
-wget 
-yum -y install
+wget https://github.com/numbnet/unix/releases/download/v1.24.3/plexmediaserver-1.24.3.5033-757abe6b4.x86_64.rpm
+yum -y install plexmediaserver-1.24.3.5033-757abe6b4.x86_64.rpm
 
 yum -y install plexmediaserver
 dnf -y install plexmediaserver
