@@ -1,26 +1,29 @@
 #!/bin/bash
 
-title="Install OwnCloud to Ubuntu"
+title="Install OwnCloud to $OS"
 
 ## ==============
 ## VERSION UBUNTU
 OS=$(lsb_release -is);
 VER=$(lsb_release -rs);
-echo "$OS $VER";
-sleep 5
+
+## ==============
+## 
+function title {
+ 
+  echo -e -n "$title $OS $VER"
+}
 
 
 ## #########################
-function INST_to_UBUNTU18 {
+function toUbuntu_Eighteen {
 title
 
-#Install ownCloud on Ubuntu 18.04
-
-#Preparation
+# Preparation
 apt update && \
   apt upgrade -y
 
-#Create the occ Helper Script
+# Create the occ Helper Script
 
 FILE="/usr/local/bin/occ"
 /bin/cat <<EOM >$FILE
@@ -29,11 +32,10 @@ FILE="/usr/local/bin/occ"
 cd /var/www/owncloud
 sudo -u www-data /usr/bin/php /var/www/owncloud/occ "\$@"
 EOM
-
 chmod +x /usr/local/bin/occ
 
 
-#Install the Required Packages
+# Install the Required Packages
 apt install -y \
   apache2 \
   libapache2-mod-php \
@@ -47,23 +49,26 @@ apt install -y \
   wget
 
 
-#Install the Recommended Packages
+# Recommended Packages
 apt install -y \
   ssh bzip2 sudo cron rsync curl jq \
   inetutils-ping smbclient php-libsmbclient \
   php-smbclient coreutils php-ldap
 
-#Ubuntu 18.04 includes smbclient 4.7.6, which has a known limitation of only using version 1 of the SMB protocol.
+# Ubuntu 18.04 includes smbclient 4.7.6,
+# which has a known limitation of only
+# using version 1 of the SMB protocol.
 
 
 #Installation
 
-#Configure Apache
-#Change the Document Root
-sed -i "s#html#owncloud#" /etc/apache2/sites-available/000-default.conf
+## Configure Apache
 
+# Change the Document Root
+sed -i "s#html#owncloud#" /etc/apache2/sites-available/000-default.conf
 service apache2 restart
-Create a Virtual Host Configuration
+
+# Create a Virtual Host Configuration
 FILE="/etc/apache2/sites-available/owncloud.conf"
 /bin/cat <<EOM >$FILE
 Alias /owncloud "/var/www/owncloud/"
