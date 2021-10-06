@@ -14,37 +14,13 @@ sleep 5
 function INST_to_UBUNTU18 {
 title
 
-Install ownCloud on Ubuntu 18.04
+#Install ownCloud on Ubuntu 18.04
 
-Table of Contents
-Prerequisites
-Preparation
-Create the occ Helper Script
-Install the Required Packages
-Install the Recommended Packages
-Installation
-Configure Apache
-Configure the Database
-Download ownCloud
-Install ownCloud
-Configure ownCloud’s Trusted Domains
-Set Up a Cron Job
-Configure Caching and File Locking
-Configure Log Rotation
-This is an ultra-short guide to installing ownCloud on a fresh installation of Ubuntu 18.04. Run the following commands in your terminal to complete the installation.
-
-
-Prerequisites
-A fresh installation of Ubuntu 18.04 with SSH enabled.
-This guide assumes that you are connected as the root user.
-This guide assumes your ownCloud directory is located in /var/www/owncloud/
-Preparation
-First, ensure that all the installed packages are entirely up to date, and that PHP is available in the APT repository. To do so, follow the instructions below:
+#Preparation
 apt update && \
   apt upgrade -y
 
-Create the occ Helper Script
-Create a helper script to simplify running occ commands.
+#Create the occ Helper Script
 
 FILE="/usr/local/bin/occ"
 /bin/cat <<EOM >$FILE
@@ -57,7 +33,7 @@ EOM
 chmod +x /usr/local/bin/occ
 
 
-Install the Required Packages
+#Install the Required Packages
 apt install -y \
   apache2 \
   libapache2-mod-php \
@@ -71,19 +47,19 @@ apt install -y \
   wget
 
 
-Install the Recommended Packages
+#Install the Recommended Packages
 apt install -y \
   ssh bzip2 sudo cron rsync curl jq \
   inetutils-ping smbclient php-libsmbclient \
   php-smbclient coreutils php-ldap
 
-Ubuntu 18.04 includes smbclient 4.7.6, which has a known limitation of only using version 1 of the SMB protocol.
+#Ubuntu 18.04 includes smbclient 4.7.6, which has a known limitation of only using version 1 of the SMB protocol.
 
 
-Installation
+#Installation
 
-Configure Apache
-Change the Document Root
+#Configure Apache
+#Change the Document Root
 sed -i "s#html#owncloud#" /etc/apache2/sites-available/000-default.conf
 
 service apache2 restart
@@ -106,10 +82,12 @@ Alias /owncloud "/var/www/owncloud/"
 EOM
 
 
-Enable the Virtual Host Configuration
+#Enable the Virtual Host Configuration
 a2ensite owncloud.conf
 service apache2 reload
-Configure the Database
+
+
+#Configure the Database
 service mysql start
 mysql -u root -e "CREATE DATABASE IF NOT EXISTS owncloud; \
 GRANT ALL PRIVILEGES ON owncloud.* \
