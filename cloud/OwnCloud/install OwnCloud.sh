@@ -93,17 +93,21 @@ mysql -u root -e "CREATE DATABASE IF NOT EXISTS owncloud; \
 GRANT ALL PRIVILEGES ON owncloud.* \
   TO owncloud@localhost \
   IDENTIFIED BY 'password'";
-Enable the Recommended Apache Modules
+
+
+#Enable the Recommended Apache Modules
 echo "Enabling Apache Modules"
 
 a2enmod dir env headers mime rewrite setenvif
 service apache2 reload
-Download ownCloud
+
+
+#Download ownCloud
 cd /var/www/
 wget https://download.owncloud.org/community/owncloud-10.8.0.tar.bz2 && \
 tar -xjf owncloud-10.8.0.tar.bz2 && \
 chown -R www-data. owncloud
-Install ownCloud
+#Install ownCloud
 occ maintenance:install \
     --database "mysql" \
     --database-name "owncloud" \
@@ -111,17 +115,27 @@ occ maintenance:install \
     --database-pass "password" \
     --admin-user "admin" \
     --admin-pass "admin"
-Configure ownCloud’s Trusted Domains
+#Configure ownCloud’s Trusted Domains
 myip=$(hostname -I|cut -f1 -d ' ')
 occ config:system:set trusted_domains 1 --value="$myip"
-Set Up a Cron Job
-Set your background job mode to cron
+#Set your background job mode to cron
 occ background:cron
 echo "*/15  *  *  *  * /var/www/owncloud/occ system:cron" \
   > /var/spool/cron/crontabs/www-data
 chown www-data.crontab /var/spool/cron/crontabs/www-data
 chmod 0600 /var/spool/cron/crontabs/www-data
-If you need to sync your users from an LDAP or Active Directory Server, add this additional Cron job. Every 15 minutes this cron job will sync LDAP users in ownCloud and disable the ones who are not available for ownCloud. Additionally, you get a log file in /var/log/ldap-sync/user-sync.log for debugging.
+
+
+#If you need to sync your users from
+# an LDAP or Active Directory
+# Server, add this additional Cron job.
+# Every 15 minutes this cron job will 
+# sync LDAP users in ownCloud 
+# and disable the ones who are not
+# available for ownCloud.
+#Additionally, you get a log file
+# in /var/log/ldap-sync/user-sync.log for debugging.
+
 echo "*/15 * * * * /var/www/owncloud/occ user:sync 'OCA\User_LDAP\User_Proxy' -m disable -vvv >> /var/log/ldap-sync/user-sync.log 2>&1" > /var/spool/cron/crontabs/www-data
 chown www-data.crontab  /var/spool/cron/crontabs/www-data
 chmod 0600  /var/spool/cron/crontabs/www-data
@@ -129,7 +143,7 @@ mkdir -p /var/log/ldap-sync
 touch /var/log/ldap-sync/user-sync.log
 chown www-data. /var/log/ldap-sync/user-sync.log
 
-Configure Caching and File Locking
+#Configure Caching and File Locking
 #Execute these commands:
 occ config:system:set \
    memcache.local \
@@ -139,12 +153,13 @@ occ config:system:set \
    memcache.locking \
    --value '\OC\Memcache\Redis'
 
-service redis-server start
-
+#service redis-server start
 occ config:system:set \
    redis \
    --value '{"host": "127.0.0.1", "port": "6379"}' \
    --type json
+
+
 ##Configure Log Rotation
 #Execute this command to set up log rotation.
 FILE="/etc/logrotate.d/owncloud"
@@ -158,6 +173,8 @@ sudo /bin/cat <<EOM >$FILE
   compresscmd /bin/gzip
 }
 EOM
+
+
 #Finalise the Installation
 #Make sure the permissions are correct
 cd /var/www/
@@ -178,8 +195,6 @@ apt update && \
   apt upgrade -y
 
 # Create the occ Helper Script
-# Create a helper script to 
-# simplify running occ commands.
   FILE="/usr/local/bin/occ"
   /bin/cat <<EOM >$FILE
 #! /bin/bash
@@ -202,17 +217,22 @@ apt install -y \
   wget
 
 
-Note : php 7.4 is the default version installable with Ubuntu 20.04
-Install the Recommended Packages
+# Note : php 7.4 is the default version installable with Ubuntu 20.04
+# Install the Recommended Packages
 apt install -y \
   ssh bzip2 rsync curl jq \
   inetutils-ping coreutils
-Installation
-Configure Apache
-Change the Document Root
+
+
+### Installation
+## Configure Apache
+#Change the Document Root
+
 sed -i "s#html#owncloud#" /etc/apache2/sites-available/000-default.conf
 service apache2 restart
-Create a Virtual Host Configuration
+
+
+#Create a Virtual Host Configuration
 FILE="/etc/apache2/sites-available/owncloud.conf"
 /bin/cat <<EOM >$FILE
 Alias /owncloud "/var/www/owncloud/"
@@ -229,24 +249,34 @@ Alias /owncloud "/var/www/owncloud/"
  SetEnv HTTP_HOME /var/www/owncloud
 </Directory>
 EOM
-Enable the Virtual Host Configuration
+
+
+#Enable the Virtual Host Configuration
 a2ensite owncloud.conf
 service apache2 reload
-Configure the Database
+
+
+#Configure the Database
 mysql -u root -e "CREATE DATABASE IF NOT EXISTS owncloud; \
 GRANT ALL PRIVILEGES ON owncloud.* \
   TO owncloud@localhost \
   IDENTIFIED BY 'password'";
-Enable the Recommended Apache Modules
+
+
+# Enable the Recommended Apache Modules
 echo "Enabling Apache Modules"
 a2enmod dir env headers mime rewrite setenvif
 service apache2 reload
-Download ownCloud
+
+
+# Download ownCloud
 cd /var/www/
 wget https://download.owncloud.org/community/owncloud-10.8.0.tar.bz2 && \
 tar -xjf owncloud-10.8.0.tar.bz2 && \
 chown -R www-data. owncloud
-Install ownCloud
+
+
+#Install ownCloud
 occ maintenance:install \
     --database "mysql" \
     --database-name "owncloud" \
@@ -254,17 +284,23 @@ occ maintenance:install \
     --database-pass "password" \
     --admin-user "admin" \
     --admin-pass "admin"
-Configure ownCloud’s Trusted Domains
+
+# Configure ownCloud’s Trusted Domains
 myip=$(hostname -I|cut -f1 -d ' ')
 occ config:system:set trusted_domains 1 --value="$myip"
-Set Up a Cron Job
-Set your background job mode to cron
+
+
+#Set Up a Cron Job
+# Set your background job mode to cron
 occ background:cron
 echo "*/15  *  *  *  * /var/www/owncloud/occ system:cron" \
   > /var/spool/cron/crontabs/www-data
 chown www-data.crontab /var/spool/cron/crontabs/www-data
 chmod 0600 /var/spool/cron/crontabs/www-data
-If you need to sync your users from an LDAP or Active Directory Server, add this additional Cron job. Every 15 minutes this cron job will sync LDAP users in ownCloud and disable the ones who are not available for ownCloud. Additionally, you get a log file in /var/log/ldap-sync/user-sync.log for debugging.
+
+
+
+# If you need to sync your users from an LDAP or Active Directory Server, add this additional Cron job. Every 15 minutes this cron job will sync LDAP users in ownCloud and disable the ones who are not available for ownCloud. Additionally, you get a log file in /var/log/ldap-sync/user-sync.log for debugging.
 echo "*/15 * * * * /var/www/owncloud/occ user:sync 'OCA\User_LDAP\User_Proxy' -m disable -vvv >> /var/log/ldap-sync/user-sync.log 2>&1" >> /var/spool/cron/crontabs/www-data
 chown www-data.crontab  /var/spool/cron/crontabs/www-data
 chmod 0600  /var/spool/cron/crontabs/www-data
@@ -302,9 +338,12 @@ EOM
 # Make sure the permissions are correct
 cd /var/www/
 chown -R www-data. owncloud
-echo "ownCloud is now installed"
 
 }
+
+echo "ownCloud is now installed"
+
+exit
 
 
 
