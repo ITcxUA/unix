@@ -26,28 +26,18 @@ yum-config-manager --enable remi-php70
 yum install php php-mysql php-pecl-zip php-xml php-mbstring php-gd php-fpm php-intl
 
 ## BACKUP
-tar czvf /etc/php-fpm.d."$DATA_TIME".bac.tar.gz /etc/php-fpm.d
-
-#Теперь давайте найдем следующие строки в /etc/php-fpm.d/www.conf
+tar czvf /etc/php-fpm.d.${DATA_TIME}.bac.tar.gz /etc/php-fpm.d
 cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bac
-
-# Замените значения user = apache => user = nginx
 sed -i 's/^user = .*/user = nginx/g' /etc/php-fpm.d/www.conf
-# Замените значения group = apache => group = nginx
 sed -i 's/^group = .*/group = nginx/g' /etc/php-fpm.d/www.conf
 
 
 ##=====================================
-# разрешение для каталога сеансов PHP
-# вам нужно пропустить этот шаг, если вы хотите использовать Apache вместо Nginx.
 chown -R root:nginx /var/lib/php/session/
-#перезапуск php-fpm
 systemctl restart php-fpm
 
-##=====================================
-##=====================================
-## Установка сервера базы данных MariaDB
-
+#=====================================
+# install MariaDB
 touch /etc/yum.repos.d/MariaDB.repo
 cat > /etc/yum.repos.d/MariaDB.repo <<EOF
 	[mariadb]
@@ -58,12 +48,17 @@ cat > /etc/yum.repos.d/MariaDB.repo <<EOF
 EOF
 
 yum install MariaDB-server MariaDB-client -y
-systemctl start mariadb
-systemctl enable mariadb
+systemctl start mariadb && systemctl enable mariadb
 systemctl status mariadb
 
 # создать пароль root, удалить тестовую базу данных, удалить анонимного пользователя, а затем перезагрузить эти привилегии.
-mysql_secure_installation
+mysql_secure_installation <<EOL>>
+y
+y
+y
+y
+y
+EOL
 
 ##=====================================
 ##================ INFO ================
@@ -73,31 +68,24 @@ mysql_secure_installation
 # Remove test database and access to it? [Y/n] Y
 # Reload privilege tables now? [Y/n] Y
 
-#После создания вы можете протестировать пароль:
+# test
 mysql -u root -p
-
-##=====================================
-# Шаг 6. Создание базы данных.
+# Create bd
 mysql -uroot -p -e "CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
 mysql -uroot -p -e "GRANT ALL on nextcloud.* to nextcloud@localhost identified by 'numbnet'"
 mysql -uroot -p -e "FLUSH privileges"
 
-##=====================================
-##=====================================
-### Шаг 7. Настройка веб-сервера.
-## На предыдущем шаге вы выбрали веб-сервер для установки, теперь вам нужно его настроить.
-
-##=====================================
-#Конфигурация Nginx
-#Если вы хотите использовать nginx, создайте файл конфигурации для блока сервера nginx
-
+#----------------------
+# Configuration NGinx
+MYip=""
+if [[ -z "$MYip" ]]; then read MYip; fi;
 cat > /etc/nginx/conf.d/192.168.1.10.conf <<EOF
 upstream php {
 	server 127.0.0.1:9000;
 	}
 
 server {
-	server_name 192.168.1.10;
+	server_name ${MYip};
 
 	add_header X-Content-Type-Options nosniff;
 	add_header X-XSS-Protection "1; mode=block";
@@ -193,46 +181,48 @@ systemctl restart nginx
 
 ##=====================================
 ##=====================================
-# Конфигурация Apache
-# Создайте файл конфигурации виртуального хоста для домена, для размещения Nextcloud.
+# Config Apache
 
-#cat > /etc/httpd/conf.d/192.168.1.10.conf <<EOF
-#<VirtualHost *:80>
+function Conf_Apache() {
 
-#ServerAdmin admin@192.168.1.10
-#DocumentRoot /var/www/nextcloud
-#ServerName 192.168.1.10
-#ServerAlias www.192.168.1.10
+  cat > /etc/httpd/conf.d/${MYip}.conf <<EOF
+<VirtualHost *:80>
 
-#<Directory /var/www/html/nextcloud>
-#Options +FollowSymlinks
-#AllowOverride All
+ServerAdmin admin@"${MYip}"
+DocumentRoot /var/www/nextcloud
+ServerName ${MYip}
+ServerAlias www.${MYip}
 
-#<IfModule mod_dav.c>
-#Dav off
-#</IfModule>
+<Directory /var/www/html/nextcloud>
+Options +FollowSymlinks
+AllowOverride All
 
-#SetEnv HOME /var/www/nextcloud
-#SetEnv HTTP_HOME /var/www/nextcloud
-#</Directory>
+<IfModule mod_dav.c>
+Dav off
+</IfModule>
 
-#ErrorLog /var/log/httpd/nextcloud-error_log
-#CustomLog /var/log/httpd/nextcloud-access_log common
+SetEnv HOME /var/www/nextcloud
+SetEnv HTTP_HOME /var/www/nextcloud
+</Directory>
 
-#</VirtualHost>
-#EOF
+ErrorLog /var/log/httpd/nextcloud-error_log
+CustomLog /var/log/httpd/nextcloud-access_log common
 
-##=====================================
-# Перейдите на официальный сайт Nextcloud и загрузите последнюю стабильную версию приложения
-wget https://download.nextcloud.com/server/releases/nextcloud-14.0.0.zip
+</VirtualHost>
+EOF
 
+echo "Config End";
+}
 
-#Распакуйте загруженный zip-архив в корневой каталог документа на вашем сервере
-unzip nextcloud-14.0.0.zip -d /var/www/
+#--------------
+wget https://download.nextcloud.com/server/releases/nextcloud-14.0.0.zip -O nextcloud.zip
+unzip nextcloud.zip -d /var/www/
 mkdir /var/www/nextcloud/data
 chown -R nginx: /var/www/nextcloud
 
 ##=====================================
 #Если вы выбрали Apache, то вам нужно установить разрешение для пользователя Apache
 # chown -R apache: /var/www/nextcloud
+
 exit
+
