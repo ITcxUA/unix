@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# bash <(vurl -fsSL https://raw.githubusercontent.com/ITcxUA/unix/master/Breeze-Easy-Shell/breeze.sh)
+# bash <(curl -fsSL https://raw.githubusercontent.com/ITcxUA/unix/master/Breeze-Easy-Shell/breeze.sh)
 
 ver="v1.9.2"
 title="Breeze Easy Shell"
